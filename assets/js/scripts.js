@@ -99,9 +99,9 @@
 			
 })(jQuery);
 
-
+// START AOS ANIMATION JS 
 AOS.init();
-
+// END AOS ANIMATION JS 
 
 // portfoilo view button js
 
