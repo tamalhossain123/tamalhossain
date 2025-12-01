@@ -245,13 +245,40 @@ color:#fff;
 	font-family: 'Jost', sans-serif;
 	-webkit-transition: all 0.5s;
 	transition: all 0.5s;
+	 position: relative;
+    padding-bottom: 5px;
+    color: #fff !important; 
 	text-transform: capitalize;
 	font-weight: 600;
 }
-.navbar-custom .navbar-nav li a:hover,
-.navbar-custom .navbar-nav li a:active,
+
+
+.navbar-custom .navbar-nav li a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px; 
+    bottom: 0;
+    left: 0;
+    background-color: #f0bb62; 
+    transition: width 0.2s ease-in-out; 
+}
+
+
+.navbar-custom .navbar-nav li a.active::after {
+    width: 80% ;
+}
+
+
+.navbar-custom .navbar-nav li a:hover::after {
+    width: 100%;
+}
+
+
+
 .navbar-custom .navbar-nav li a.active {
-    color: #fff !important;
+    color: #f0bb62 !important;
+	transition: all 0.3s ease-in-out; 
 }
 .navbar-custom .navbar-nav .nav-item:last-child .nav-link {
     margin-right: 0;

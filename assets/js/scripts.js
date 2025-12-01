@@ -27,7 +27,41 @@
 		window.addEventListener('scroll', (ev) => {
 			ev.preventDefault();
 			windowScroll();
-		})	  	
+		})	
+        
+        /* --- ACTIVE MENU ON SCROLL LOGIC --- */
+    // স্ক্রল করার সাথে সাথে মেনু হাইলাইট করার ফাংশন
+    // অপ্টিমাইজড: শুধুমাত্র যখন সেকশন পরিবর্তন হবে তখনই ক্লাস পরিবর্তন হবে (এনিমেশন স্মুথ করার জন্য)
+    let currentActiveSection = ''; 
+
+    window.addEventListener('scroll', function() {
+        let current = '';
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.navbar-nav li a');
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            // ১৫০ পিক্সেল অফসেট দেওয়া হয়েছে
+            if (pageYOffset >= (sectionTop - 150)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        // যদি বর্তমান সেকশন আগের সেকশন থেকে আলাদা হয়, তবেই ক্লাস পরিবর্তন হবে
+        if (current !== currentActiveSection) {
+            currentActiveSection = current;
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                // ট্রানজিশন ইফেক্ট এর জন্য স্টাইল ফাইলে .active ক্লাসে transition প্রপার্টি থাকতে হবে
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
 		/*END MENU JS*/
 
 		/*START PROGRESS BAR*/
