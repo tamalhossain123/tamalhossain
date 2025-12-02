@@ -266,7 +266,7 @@ color:#fff;
 
 
 .navbar-custom .navbar-nav li a.active::after {
-    width: 80% ;
+    width: 100% ;
 }
 
 
