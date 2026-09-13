@@ -1,280 +1,546 @@
-
 (function($) {
-	'use strict';
-	
-	jQuery(document).on('ready', function(){
-	
-		/*PRELOADER JS*/
-		$(window).on('load', function() { 
-			$('.status').fadeOut();
-			$('.preloader').delay(350).fadeOut('slow'); 
-		}); 
-		/*END PRELOADER JS*/	
-			
-		/*START MENU JS*/		
-		function windowScroll() {
-			const navbar = document.getElementById("navbar");
-			if (
-				document.body.scrollTop >= 50 ||
-				document.documentElement.scrollTop >= 50
-			) {
-				navbar.classList.add("nav-sticky");
-			} else {
-				navbar.classList.remove("nav-sticky");
-			}
-		}
+    'use strict';
 
-		window.addEventListener('scroll', (ev) => {
-			ev.preventDefault();
-			windowScroll();
-		})	
-        
-        /* --- ACTIVE MENU ON SCROLL LOGIC --- */
-    // স্ক্রল করার সাথে সাথে মেনু হাইলাইট করার ফাংশন
-    // অপ্টিমাইজড: শুধুমাত্র যখন সেকশন পরিবর্তন হবে তখনই ক্লাস পরিবর্তন হবে (এনিমেশন স্মুথ করার জন্য)
-    let currentActiveSection = ''; 
+    const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api';
 
+    /* ==========================================================================
+       1. FAST PRELOADER
+       ========================================================================== */
+    function dismissPreloader() {
+        const preloader = document.getElementById('preloader');
+        if (preloader && preloader.style.display !== 'none') {
+            preloader.style.opacity = '0';
+            setTimeout(() => { preloader.style.display = 'none'; }, 200);
+        }
+    }
+    document.addEventListener('DOMContentLoaded', dismissPreloader);
+    window.addEventListener('load', dismissPreloader);
+    setTimeout(dismissPreloader, 400);
+
+    /* ==========================================================================
+       2. STICKY NAVBAR
+       ========================================================================== */
     window.addEventListener('scroll', function() {
-        let current = '';
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.navbar-nav li a');
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            // ১৫০ পিক্সেল অফসেট দেওয়া হয়েছে
-            if (pageYOffset >= (sectionTop - 150)) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        // যদি বর্তমান সেকশন আগের সেকশন থেকে আলাদা হয়, তবেই ক্লাস পরিবর্তন হবে
-        if (current !== currentActiveSection) {
-            currentActiveSection = current;
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                // ট্রানজিশন ইফেক্ট এর জন্য স্টাইল ফাইলে .active ক্লাসে transition প্রপার্টি থাকতে হবে
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
-            });
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            navbar.classList.toggle('nav-sticky', window.scrollY >= 50);
         }
     });
-		/*END MENU JS*/
 
-		/*START PROGRESS BAR*/
-	    $('.progress-bar > span').each(function(){
-			var $this = $(this);
-			var width = $(this).data('percent');
-			$this.css({
-				'transition' : 'width 2s'
-			});
-			
-			setTimeout(function() {
-				$this.appear(function() {
-						$this.css('width', width + '%');
-				});
-			}, 500);
-		});
-		/*END PROGRESS BAR*/	
+    /* ==========================================================================
+       3. BACKGROUND CANVAS PARTICLES (60 FPS)
+       ========================================================================== */
+    const canvas = document.getElementById('bgCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = window.innerWidth < 768 ? 25 : 50;
 
-		/* START COUNTDOWN JS*/
-		$('.counter_feature').on('inview', function(event, visible, visiblePartX, visiblePartY) {
-			if (visible) {
-				$(this).find('.counter-num').each(function () {
-					var $this = $(this);
-					$({ Counter: 0 }).animate({ Counter: $this.text() }, {
-						duration: 2000,
-						easing: 'swing',
-						step: function () {
-							$this.text(Math.ceil(this.Counter));
-						}
-					});
-				});
-				$(this).unbind('inview');
-			}
-		});
-		/* END COUNTDOWN JS */		
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
 
-		/* START JQUERY LIGHTBOX*/
-		jQuery('.lightbox').venobox({
-			numeratio: true,
-			infinigall: true
-		});	
-		/* END JQUERY LIGHTBOX*/	
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 0.8,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4
+            });
+        }
 
-		/* START MIX JS */
-		$('.portfolio_item').mixItUp({
-		
-		});		
-			
-	}); 		
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(240, 187, 98, 0.25)';
+            ctx.strokeStyle = 'rgba(240, 187, 98, 0.05)';
 
-	/* START PARALLAX JS */
-	(function () {
+            particles.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
 
-		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-		 
-		} else {
-			$(window).stellar({
-				horizontalScrolling: false,
-				responsive: true
-			});
-		}
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
 
-	}());
-	/* END PARALLAX JS  */
-	
-	/*START WOW ANIMATION JS*/
-	  new WOW().init();	
-	/*END WOW ANIMATION JS*/	
-			
-})(jQuery);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
 
-// START AOS ANIMATION JS 
-AOS.init();
-// END AOS ANIMATION JS 
+                for (let j = idx + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    }
 
-// portfoilo view button js
+    /* ==========================================================================
+       4. SKILLS SCROLL ANIMATION & NUMBER COUNTER
+       ========================================================================== */
+    window.triggerSkillsAnimation = function() {
+        const skillsSection = document.getElementById('skills');
+        if (!skillsSection) return;
 
-/* --- PORTFOLIO FILTERING & ANIMATION LOGIC --- */
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // প্রগ্রেস বার বিস্তার
+                    entry.target.querySelectorAll('.skill-progress-fill').forEach(bar => {
+                        const targetWidth = bar.getAttribute('data-percent') || '0';
+                        bar.style.width = targetWidth + '%';
+                    });
+
+                    // পারসেন্টেজ সংখ্যা কাউন্ট-আপ
+                    entry.target.querySelectorAll('.skill-percent').forEach(label => {
+                        const targetNum = parseInt(label.getAttribute('data-target'), 10) || 0;
+                        let currentNum = 0;
+                        const duration = 1400;
+                        const stepTime = Math.abs(Math.floor(duration / (targetNum || 1)));
+
+                        const timer = setInterval(() => {
+                            currentNum += 1;
+                            label.innerText = currentNum + '%';
+                            if (currentNum >= targetNum) {
+                                clearInterval(timer);
+                                label.innerText = targetNum + '%';
+                            }
+                        }, stepTime);
+                    });
+
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.25 });
+
+        observer.observe(skillsSection);
+    };
+
+    window.updateSkillsFromBackend = function(skills) {
+        const sContainer = document.getElementById('dynSkillsList');
+        if (sContainer && skills && skills.length > 0) {
+            sContainer.innerHTML = skills.map(s => `
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">${s.name}</span>
+                        <span class="skill-percent" data-target="${s.percentage}">0%</span>
+                    </div>
+                    <div class="skill-progress-track">
+                        <div class="skill-progress-fill" data-percent="${s.percentage}" style="width: 0%;"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            window.triggerSkillsAnimation();
+        }
+    };
+
+    /* ==========================================================================
+       5. DYNAMIC BACKEND SYNC (Profile, Resume & Projects)
+       ========================================================================== */
+    async function syncPortfolioWithBackend() {
+        try {
+            const [profRes, projRes] = await Promise.all([
+                fetch(`${API_BASE}/profile`).catch(() => null),
+                fetch(`${API_BASE}/projects`).catch(() => null)
+            ]);
+
+            // PROFILE & RESUME TIMELINE HYDRATION
+            if (profRes && profRes.ok) {
+                const prof = await profRes.json();
+                
+                if (prof.name) {
+                    const sub = document.getElementById('dynSubtitle');
+                    if (sub) sub.innerText = `- I Am ${prof.name}`;
+                }
+                if (prof.email) {
+                    const em1 = document.getElementById('dynEmail');
+                    const em2 = document.getElementById('dynContactEmail');
+                    if (em1) em1.innerText = prof.email;
+                    if (em2) em2.innerText = prof.email;
+                }
+                if (prof.phone) {
+                    const ph1 = document.getElementById('dynPhone');
+                    const ph2 = document.getElementById('dynContactPhone');
+                    if (ph1) ph1.innerText = prof.phone;
+                    if (ph2) ph2.innerText = prof.phone;
+                }
+                if (prof.address) {
+                    const ad1 = document.getElementById('dynAddress');
+                    const ad2 = document.getElementById('dynContactAddress');
+                    if (ad1) ad1.innerText = prof.address;
+                    if (ad2) ad2.innerText = prof.address;
+                }
+                if (prof.profileImage) {
+                    const img = document.getElementById('dynProfileImg');
+                    if (img) img.src = prof.profileImage;
+                }
+                if (prof.aboutBio) {
+                    const bio = document.getElementById('dynAboutBio');
+                    if (bio) bio.innerHTML = `<p>${prof.aboutBio}</p>`;
+                }
+
+                // Skills Rendering
+                if (prof.skills && prof.skills.length > 0) {
+                    window.updateSkillsFromBackend(prof.skills);
+                }
+
+                // Education Timeline Rendering
+                if (prof.education && prof.education.length > 0) {
+                    const eContainer = document.getElementById('dynEduContainer');
+                    if (eContainer) {
+                        eContainer.innerHTML = prof.education.map(e => `
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-card">
+                                    <div class="timeline-card-header">
+                                        <h4 class="timeline-role">${e.degree || ''}</h4>
+                                        <span class="timeline-badge">${e.year || ''}</span>
+                                    </div>
+                                    <h5 class="timeline-company"><i class="fa-solid fa-award me-2"></i>${e.institute || ''}</h5>
+                                    <p class="timeline-desc">${e.field ? e.field + ' - ' : ''}Formal academic curriculum and practical training.</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+                // Experience Timeline Rendering
+                if (prof.experience && prof.experience.length > 0) {
+                    const expContainer = document.getElementById('dynExpContainer');
+                    if (expContainer) {
+                        expContainer.innerHTML = prof.experience.map(x => `
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-card">
+                                    <div class="timeline-card-header">
+                                        <h4 class="timeline-role">${x.role || ''}</h4>
+                                        <span class="timeline-badge">${x.duration || ''}</span>
+                                    </div>
+                                    <h5 class="timeline-company"><i class="fa-regular fa-building me-2"></i>${x.company || ''}</h5>
+                                    <p class="timeline-desc">${x.description || ''}</p>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                }
+            }
+
+            // PROJECTS HYDRATION (Unified Cards)
+            if (projRes && projRes.ok) {
+                const projects = await projRes.json();
+                if (projects && projects.length > 0) {
+                    const grid = document.getElementById('dynPortfolioGrid');
+                    if (grid) {
+                        grid.innerHTML = projects.map(p => {
+                            const isWeb = p.category === 'website' || p.category === 'wordpress';
+                            const safeTitle = (p.title || '').replace(/'/g, "\\'");
+
+                            if (isWeb) {
+                                return `
+                                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                                        <div class="portfolio-card">
+                                            <div class="browser-bar">
+                                                <span class="dot dot-red"></span>
+                                                <span class="dot dot-yellow"></span>
+                                                <span class="dot dot-green"></span>
+                                                <span class="browser-title">${p.title}</span>
+                                            </div>
+                                            <div class="card-screen-scroll">
+                                                <img src="${p.image}" alt="${p.title}" loading="lazy">
+                                            </div>
+                                            <div class="card-meta">
+                                                <div class="meta-text">
+                                                    <span class="meta-cat">${p.category}</span>
+                                                    <h3 class="title">${p.title}</h3>
+                                                    <p class="desc">${p.description || ''}</p>
+                                                </div>
+                                                <div class="meta-action">
+                                                    ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview"><i class="fa fa-link"></i></a>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                return `
+                                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                                        <div class="portfolio-card">
+                                            <div class="browser-bar">
+                                                <span class="dot dot-red"></span>
+                                                <span class="dot dot-yellow"></span>
+                                                <span class="dot dot-green"></span>
+                                                <span class="browser-title">${p.title}</span>
+                                            </div>
+                                            <div class="card-screen-graphic">
+                                                <img src="${p.image}" alt="${p.title}" loading="lazy">
+                                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${p.image}', '${safeTitle}')" title="Zoom Preview">
+                                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                                </button>
+                                            </div>
+                                            <div class="card-meta">
+                                                <div class="meta-text">
+                                                    <span class="meta-cat">${p.category}</span>
+                                                    <h3 class="title">${p.title}</h3>
+                                                    <p class="desc">${p.description || ''}</p>
+                                                </div>
+                                                <div class="meta-action">
+                                                    <button type="button" onclick="openLightbox('${p.image}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        }).join('');
+                    }
+                }
+            }
+        } catch (err) {
+            console.log('Running on fallback offline content:', err);
+        }
+    }
+
+    /* ==========================================================================
+       6. PORTFOLIO FILTERING
+       ========================================================================== */
     document.addEventListener('DOMContentLoaded', function() {
-        const allItems = document.querySelectorAll('.mix');
-        const filterButtons = document.querySelectorAll('.portfolio_filter ul li');
-        const viewMoreBtn = document.getElementById('viewMoreBtn');
-        const viewMoreContainer = document.querySelector('.view-more-container');
-        
-        const itemsToShow = 6;
-        let isExpanded = false;
-        
-   
-        let activeBtn = document.querySelector('.portfolio_filter .active');
-        let currentFilter = activeBtn ? activeBtn.getAttribute('data-filter') : 'all';
+        syncPortfolioWithBackend();
+        window.triggerSkillsAnimation();
 
-        
+        const filterButtons = document.querySelectorAll('.portfolio_filter ul li');
         filterButtons.forEach(button => {
             button.addEventListener('click', function() {
-       
                 filterButtons.forEach(btn => btn.classList.remove('active'));
                 this.classList.add('active');
-                
-          
-                currentFilter = this.getAttribute('data-filter');
-                isExpanded = false; 
-                updateVisibility();
-            });
-        });
 
-        
-        viewMoreBtn.addEventListener('click', function() {
-            isExpanded = !isExpanded;
-            updateVisibility();
-        });
+                const filterValue = this.getAttribute('data-filter');
+                const items = document.querySelectorAll('#dynPortfolioGrid .mix');
 
-        function updateVisibility() {
-            let visibleCount = 0;
-            let matchingItemsCount = 0;
-
-            allItems.forEach(item => {
-                const matchesFilter = currentFilter === 'all' || item.matches(currentFilter);
-                
-                if (matchesFilter) {
-                    matchingItemsCount++;
-                    
-                    const shouldShow = isExpanded || visibleCount < itemsToShow;
-
-                    if (shouldShow) {
-                        item.classList.remove('hide-item');
+                items.forEach(item => {
+                    if (filterValue === 'all' || item.classList.contains(filterValue.replace('.', ''))) {
                         item.style.display = 'block';
-                        
-                        if(!item.classList.contains('show-item')) {
-                            item.classList.add('show-item');
-                        }
-                        visibleCount++;
                     } else {
-                        if (item.style.display === 'block' && !item.classList.contains('hide-item')) {
-                            item.classList.remove('show-item');
-                            item.classList.add('hide-item');
-                            
-                            setTimeout(() => {
-                                if(item.classList.contains('hide-item')) {
-                                    item.style.display = 'none';
-                                    item.classList.remove('hide-item');
-                                }
-                            }, 450); 
-                        } else if (item.style.display !== 'block') {
-                            item.style.display = 'none';
-                        }
+                        item.style.display = 'none';
                     }
-                } else {
-                    item.style.display = 'none';
-                    item.classList.remove('show-item', 'hide-item');
-                }
+                });
             });
-
-            if (matchingItemsCount <= itemsToShow) {
-                viewMoreContainer.style.display = 'none';
-            } else {
-                viewMoreContainer.style.display = 'block';
-                viewMoreBtn.textContent = isExpanded ? "Show Less" : "View All Projects";
-            }
-        }
-
-        updateVisibility();
+        });
     });
 
+    /* ==========================================================================
+       7. LIGHTBOX CONTROLS
+       ========================================================================== */
+    window.openLightbox = function(imageSrc, title) {
+        const modal = document.getElementById('imageLightbox');
+        const img = document.getElementById('lightboxImg');
+        const caption = document.getElementById('lightboxTitle');
 
-// Contact Form js start
+        if (!modal || !img) return;
 
+        img.src = imageSrc || '';
+        img.alt = title || 'Project Preview';
+        if (caption) caption.innerText = title || '';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    };
 
+    window.closeLightbox = function() {
+        const modal = document.getElementById('imageLightbox');
+        const img = document.getElementById('lightboxImg');
+
+        if (modal) modal.classList.remove('active');
+        if (img) img.src = '';
+        document.body.style.overflow = '';
+    };
+
+    window.handleLightboxBackdrop = function(e) {
+        if (e && e.target && e.target.id === 'imageLightbox') {
+            window.closeLightbox();
+        }
+    };
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            window.closeLightbox();
+        }
+    });
+
+    /* ==========================================================================
+       8. CONTACT FORM SUBMISSION (Web3Forms)
+       ========================================================================== */
     const form = document.getElementById('contactForm');
     const popup = document.getElementById('thankYouPopup');
     const submitBtn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', function(e) {
-        e.preventDefault(); 
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Sending...";
+            submitBtn.disabled = true;
 
-       
-        const originalBtnText = submitBtn.innerText;
-        submitBtn.innerText = "Sending...";
-        submitBtn.disabled = true;
-
-        const formData = new FormData(form);
-
-       
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData
-        })
-        .then(async (response) => {
-            if (response.status == 200) {
-               
-                popup.style.display = 'block';
-                form.reset(); 
-            } else {
-                alert("Somthing is Wrong Please Try agin latter");
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            alert("Somthing Is Wrong");
-        })
-        .finally(() => {
-            
-            submitBtn.innerText = originalBtnText;
-            submitBtn.disabled = false;
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(res => {
+                if (res.ok) {
+                    if (popup) popup.style.display = 'flex';
+                    form.reset();
+                } else {
+                    alert("Something went wrong, please try again.");
+                }
+            })
+            .catch(() => alert("Network error, please try again."))
+            .finally(() => {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            });
         });
-    });
-
-   
-    function closePopup() {
-        popup.style.display = 'none';
     }
 
+    window.closePopup = function() {
+        if (popup) popup.style.display = 'none';
+    };
+
+    /* ==========================================================================
+       9. INITIALIZE AOS ANIMATIONS
+       ========================================================================== */
+    if (typeof AOS !== 'undefined') {
+        AOS.init({ once: true, duration: 800 });
+    }
+
+})(jQuery);
 
 
+// ==========================================================================
+// BRANDED LIVE CHAT (SOCKET.IO TO BACKEND)
+// ==========================================================================
+// লাইভ সার্ভার (127.0.0.1:5500) হলেও সরাসরি নোড ব্যাকএন্ড (5000) এ কানেক্ট হবে
+const BACKEND_SOCKET_URL = 'http://localhost:5000';
 
-  
+let visitorId = localStorage.getItem('portfolio_visitor_id');
+if (!visitorId) {
+    visitorId = Math.random().toString(36).substring(2, 7);
+    localStorage.setItem('portfolio_visitor_id', visitorId);
+}
 
+let liveSocket = null;
+if (typeof io !== 'undefined') {
+    liveSocket = io(BACKEND_SOCKET_URL);
+
+    liveSocket.on('connect', () => {
+        console.log('Connected to live chat engine with Visitor ID:', visitorId);
+        liveSocket.emit('init_visitor', { visitorId });
+    });
+
+    // আপনার হোয়াটসঅ্যাপ থেকে আসা রিপ্লাই এখানে শো করা
+    liveSocket.on('admin_message', (data) => {
+        const chatBody = document.getElementById('liveChatBody');
+        if (chatBody) {
+            chatBody.innerHTML += `
+                <div class="chat-msg chat-incoming" style="animation: fadeIn 0.3s ease;">
+                    <p>${data.text}</p>
+                    <span class="chat-msg-time">${data.time}</span>
+                </div>
+            `;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        const chatBox = document.getElementById('liveChatBox');
+        if (chatBox && !chatBox.classList.contains('open')) {
+            chatBox.classList.add('open');
+            chatBox.style.display = 'flex';
+        }
+    });
+}
+
+window.toggleLiveChat = function() {
+    const chatBox = document.getElementById('liveChatBox');
+    if (!chatBox) return;
+
+    if (chatBox.classList.contains('open') || chatBox.style.display === 'flex') {
+        chatBox.classList.remove('open');
+        chatBox.style.display = 'none';
+    } else {
+        chatBox.classList.add('open');
+        chatBox.style.display = 'flex';
+        const input = document.getElementById('liveUserMessage');
+        if (input) setTimeout(() => input.focus(), 250);
+    }
+};
+
+window.sendLiveMessage = function(e) {
+    e.preventDefault();
+    const input = document.getElementById('liveUserMessage');
+    const msg = input ? input.value.trim() : '';
+    if (!msg) return;
+
+    const chatBody = document.getElementById('liveChatBody');
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    // ভিজিটরের মেসেজ বাবল দেখানো
+    if (chatBody) {
+        chatBody.innerHTML += `
+            <div class="chat-msg chat-outgoing">
+                <p>${msg}</p>
+                <span class="chat-msg-time">${time}</span>
+            </div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // ব্যাকএন্ডে মেসেজ পাঠানো
+    if (liveSocket && liveSocket.connected) {
+        liveSocket.emit('visitor_message', { visitorId, text: msg });
+    } else {
+        console.warn('Socket not connected to backend. Ensure node server.js is running!');
+    }
+
+    if (input) input.value = '';
+};
+
+// ==========================================================================
+// AUTO-POPUP FLOATING BADGE (Smooth Spring Motion Trigger)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    function showFloatingBadge() {
+        const badge = document.getElementById('chatFloatingBadge');
+        const chatBox = document.getElementById('liveChatBox');
+
+        // চ্যাটবক্স খোলা থাকলে দেখাবে না
+        if (!badge || (chatBox && (chatBox.classList.contains('open') || chatBox.style.display === 'flex'))) {
+            return;
+        }
+
+        // স্মুথ স্লাইড-ইন
+        badge.classList.remove('hide');
+        badge.classList.add('show');
+
+        // ৫ সেকেন্ড পর আলতো করে স্লাইড-আউট
+        setTimeout(function() {
+            badge.classList.remove('show');
+            badge.classList.add('hide');
+        }, 5000);
+    }
+
+    // পেজ ওপেন হওয়ার ২ সেকেন্ড পর প্রথমবার ভেসে উঠবে
+    setTimeout(function() {
+        showFloatingBadge();
+        // এরপর প্রতি ১৫ সেকেন্ড পর পর স্মুথলি রিপিট হবে
+        setInterval(showFloatingBadge, 15000);
+    }, 2000);
+});
