@@ -1,7 +1,27 @@
-(function($) {
+/**
+ * Md. Tamal Hossain Portfolio - Core Engine (Final Clean Setup)
+ * Fast Preloader + Dynamic Backend Sync + Particle Canvas + Smooth Lightbox + Skills Counter + Live Chat
+ */
+
+(function() {
     'use strict';
 
-    const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api';
+    // ১. ব্যাকএন্ড URL কনফিগারেশন (লোকালহোস্টে লোকাল সার্ভার, লাইভে Vercel স্বয়ংক্রিয়ভাবে পাবে)
+    const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? 'http://localhost:5000'
+        : 'https://tamalhossain-backend.vercel.app';
+
+    const API_BASE = `${BACKEND_URL}/api`;
+    const BACKEND_SOCKET_URL = BACKEND_URL;
+
+    // ইমেজ পাথ ঠিক করার হেল্পার ফাংশন
+    function resolveImageUrl(imgUrl) {
+        if (!imgUrl) return 'assets/img/profile-pic.png';
+        if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://') || imgUrl.startsWith('//') || imgUrl.startsWith('data:')) {
+            return imgUrl;
+        }
+        return `${BACKEND_URL}${imgUrl.startsWith('/') ? '' : '/'}${imgUrl}`;
+    }
 
     /* ==========================================================================
        1. FAST PRELOADER
@@ -95,13 +115,11 @@
         const observer = new IntersectionObserver((entries, obs) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // প্রগ্রেস বার বিস্তার
                     entry.target.querySelectorAll('.skill-progress-fill').forEach(bar => {
                         const targetWidth = bar.getAttribute('data-percent') || '0';
                         bar.style.width = targetWidth + '%';
                     });
 
-                    // পারসেন্টেজ সংখ্যা কাউন্ট-আপ
                     entry.target.querySelectorAll('.skill-percent').forEach(label => {
                         const targetNum = parseInt(label.getAttribute('data-target'), 10) || 0;
                         let currentNum = 0;
@@ -155,7 +173,7 @@
                 fetch(`${API_BASE}/projects`).catch(() => null)
             ]);
 
-            // PROFILE & RESUME TIMELINE HYDRATION
+            // PROFILE & RESUME TIMELINE
             if (profRes && profRes.ok) {
                 const prof = await profRes.json();
                 
@@ -183,7 +201,7 @@
                 }
                 if (prof.profileImage) {
                     const img = document.getElementById('dynProfileImg');
-                    if (img) img.src = prof.profileImage;
+                    if (img) img.src = resolveImageUrl(prof.profileImage);
                 }
                 if (prof.aboutBio) {
                     const bio = document.getElementById('dynAboutBio');
@@ -195,7 +213,7 @@
                     window.updateSkillsFromBackend(prof.skills);
                 }
 
-                // Education Timeline Rendering
+                // Education Timeline
                 if (prof.education && prof.education.length > 0) {
                     const eContainer = document.getElementById('dynEduContainer');
                     if (eContainer) {
@@ -215,7 +233,7 @@
                     }
                 }
 
-                // Experience Timeline Rendering
+                // Experience Timeline
                 if (prof.experience && prof.experience.length > 0) {
                     const expContainer = document.getElementById('dynExpContainer');
                     if (expContainer) {
@@ -236,7 +254,7 @@
                 }
             }
 
-            // PROJECTS HYDRATION (Unified Cards)
+            // PROJECTS HYDRATION
             if (projRes && projRes.ok) {
                 const projects = await projRes.json();
                 if (projects && projects.length > 0) {
@@ -245,6 +263,7 @@
                         grid.innerHTML = projects.map(p => {
                             const isWeb = p.category === 'website' || p.category === 'wordpress';
                             const safeTitle = (p.title || '').replace(/'/g, "\\'");
+                            const projectImg = resolveImageUrl(p.image);
 
                             if (isWeb) {
                                 return `
@@ -257,7 +276,7 @@
                                                 <span class="browser-title">${p.title}</span>
                                             </div>
                                             <div class="card-screen-scroll">
-                                                <img src="${p.image}" alt="${p.title}" loading="lazy">
+                                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
                                             </div>
                                             <div class="card-meta">
                                                 <div class="meta-text">
@@ -283,8 +302,8 @@
                                                 <span class="browser-title">${p.title}</span>
                                             </div>
                                             <div class="card-screen-graphic">
-                                                <img src="${p.image}" alt="${p.title}" loading="lazy">
-                                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${p.image}', '${safeTitle}')" title="Zoom Preview">
+                                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
+                                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
                                                     <i class="fa-solid fa-magnifying-glass-plus"></i>
                                                 </button>
                                             </div>
@@ -295,7 +314,7 @@
                                                     <p class="desc">${p.description || ''}</p>
                                                 </div>
                                                 <div class="meta-action">
-                                                    <button type="button" onclick="openLightbox('${p.image}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
+                                                    <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
                                                         <i class="fa-solid fa-eye"></i>
                                                     </button>
                                                 </div>
@@ -423,14 +442,14 @@
         AOS.init({ once: true, duration: 800 });
     }
 
-})(jQuery);
-
+})();
 
 // ==========================================================================
 // BRANDED LIVE CHAT (SOCKET.IO TO BACKEND)
 // ==========================================================================
-// লাইভ সার্ভার (127.0.0.1:5500) হলেও সরাসরি নোড ব্যাকএন্ড (5000) এ কানেক্ট হবে
-const BACKEND_SOCKET_URL = 'http://localhost:5000';
+const LIVE_BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : 'https://tamalhossain-backend.vercel.app';
 
 let visitorId = localStorage.getItem('portfolio_visitor_id');
 if (!visitorId) {
@@ -440,14 +459,13 @@ if (!visitorId) {
 
 let liveSocket = null;
 if (typeof io !== 'undefined') {
-    liveSocket = io(BACKEND_SOCKET_URL);
+    liveSocket = io(LIVE_BACKEND_URL);
 
     liveSocket.on('connect', () => {
         console.log('Connected to live chat engine with Visitor ID:', visitorId);
         liveSocket.emit('init_visitor', { visitorId });
     });
 
-    // আপনার হোয়াটসঅ্যাপ থেকে আসা রিপ্লাই এখানে শো করা
     liveSocket.on('admin_message', (data) => {
         const chatBody = document.getElementById('liveChatBody');
         if (chatBody) {
@@ -492,7 +510,6 @@ window.sendLiveMessage = function(e) {
     const chatBody = document.getElementById('liveChatBody');
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    // ভিজিটরের মেসেজ বাবল দেখানো
     if (chatBody) {
         chatBody.innerHTML += `
             <div class="chat-msg chat-outgoing">
@@ -503,11 +520,10 @@ window.sendLiveMessage = function(e) {
         chatBody.scrollTop = chatBody.scrollHeight;
     }
 
-    // ব্যাকএন্ডে মেসেজ পাঠানো
     if (liveSocket && liveSocket.connected) {
         liveSocket.emit('visitor_message', { visitorId, text: msg });
     } else {
-        console.warn('Socket not connected to backend. Ensure node server.js is running!');
+        console.warn('Socket not connected to backend.');
     }
 
     if (input) input.value = '';
@@ -521,26 +537,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const badge = document.getElementById('chatFloatingBadge');
         const chatBox = document.getElementById('liveChatBox');
 
-        // চ্যাটবক্স খোলা থাকলে দেখাবে না
         if (!badge || (chatBox && (chatBox.classList.contains('open') || chatBox.style.display === 'flex'))) {
             return;
         }
 
-        // স্মুথ স্লাইড-ইন
         badge.classList.remove('hide');
         badge.classList.add('show');
 
-        // ৫ সেকেন্ড পর আলতো করে স্লাইড-আউট
         setTimeout(function() {
             badge.classList.remove('show');
             badge.classList.add('hide');
         }, 5000);
     }
 
-    // পেজ ওপেন হওয়ার ২ সেকেন্ড পর প্রথমবার ভেসে উঠবে
     setTimeout(function() {
         showFloatingBadge();
-        // এরপর প্রতি ১৫ সেকেন্ড পর পর স্মুথলি রিপিট হবে
         setInterval(showFloatingBadge, 15000);
     }, 2000);
 });
