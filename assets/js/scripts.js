@@ -586,3 +586,143 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(showFloatingBadge, 15000);
     }, 2000);
 });
+
+
+/* ==========================================================================
+   3. BACKGROUND SPARKLING STARS ENGINE (60 FPS Smooth Cosmic Motion)
+   ========================================================================== */
+const canvas = document.getElementById('bgCanvas');
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const starCount = window.innerWidth < 768 ? 40 : 85;
+    let mouse = { x: null, y: null, radius: 120 };
+
+    window.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    window.addEventListener('mouseout', function() {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // তারা এবং স্পার্কল জেনারেটর
+    class SparklingStar {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.6; // তারার আকার
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.vx = (Math.random() - 0.5) * 0.35; // স্মুথ মোশন
+            this.vy = (Math.random() - 0.5) * 0.35;
+            this.sparkleSpeed = Math.random() * 0.03 + 0.01;
+            this.sparklePhase = Math.random() * Math.PI * 2;
+            this.isDiamond = Math.random() > 0.75; // ২৫% তারা ৪-পয়েন্ট স্পার্কল স্টার হবে
+        }
+
+        draw() {
+            this.sparklePhase += this.sparkleSpeed;
+            // সফট পালস ও উজ্জ্বলতা
+            const brightness = (Math.sin(this.sparklePhase) + 1) / 2;
+            const alpha = 0.2 + brightness * 0.7;
+
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
+            if (this.isDiamond) {
+                // ৪-কোণা ডায়মন্ড স্পার্কল স্টার
+                ctx.fillStyle = `rgba(240, 187, 98, ${alpha})`;
+                ctx.shadowColor = '#f0bb62';
+                ctx.shadowBlur = 8 * brightness;
+
+                ctx.beginPath();
+                ctx.moveTo(0, -this.size * 2.8);
+                ctx.lineTo(this.size * 0.7, -this.size * 0.7);
+                ctx.lineTo(this.size * 2.8, 0);
+                ctx.lineTo(this.size * 0.7, this.size * 0.7);
+                ctx.lineTo(0, this.size * 2.8);
+                ctx.lineTo(-this.size * 0.7, this.size * 0.7);
+                ctx.lineTo(-this.size * 2.8, 0);
+                ctx.lineTo(-this.size * 0.7, -this.size * 0.7);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                // গ্লোয়িং রাউন্ড স্টার
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+                ctx.shadowColor = 'rgba(240, 187, 98, 0.8)';
+                ctx.shadowBlur = 6 * brightness;
+
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // স্ক্রিনের বাইরে গেলে অপর পাশে ফিরে আসা
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+
+            // মাউসের কাছাকাছি এলে সফট প্যারালাক্স বাবল এফেক্ট
+            if (mouse.x != null && mouse.y != null) {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouse.radius) {
+                    let force = (mouse.radius - distance) / mouse.radius;
+                    let directionX = (dx / distance) * force * 1.5;
+                    let directionY = (dy / distance) * force * 1.5;
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+
+            this.draw();
+        }
+    }
+
+    for (let i = 0; i < starCount; i++) {
+        stars.push(new SparklingStar());
+    }
+
+    function animateSparkles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // নক্ষত্র সংযোগের সূক্ষ্ম গোল্ডেন রেখা
+        for (let a = 0; a < stars.length; a++) {
+            for (let b = a + 1; b < stars.length; b++) {
+                let dist = Math.hypot(stars[a].x - stars[b].x, stars[a].y - stars[b].y);
+                if (dist < 95) {
+                    let lineAlpha = (1 - dist / 95) * 0.08;
+                    ctx.strokeStyle = `rgba(240, 187, 98, ${lineAlpha})`;
+                    ctx.lineWidth = 0.7;
+                    ctx.beginPath();
+                    ctx.moveTo(stars[a].x, stars[a].y);
+                    ctx.lineTo(stars[b].x, stars[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        stars.forEach(star => star.update());
+        requestAnimationFrame(animateSparkles);
+    }
+    animateSparkles();
+}
