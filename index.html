@@ -6,28 +6,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- SEO Meta Tags -->
-    <title id="dynMetaTitle">Md. Tamal Hossain | Front-End & WordPress Developer</title>
-    <meta name="description" content="Portfolio of Md. Tamal Hossain — Passionate Front-End Developer and WordPress Specialist." />
+    <title>
+      Md. Tamal Hossain | Front-End & WordPress Developer | UI/UX & Graphic
+      Designer
+    </title>
+    <meta
+      name="description"
+      content="Portfolio of Md. Tamal Hossain — Passionate Front-End Developer, WordPress Specialist, and UI/UX Designer based in Bangladesh. Delivering modern responsive web solutions."
+    />
+    <meta
+      name="keywords"
+      content="Tamal Hossain, Md Tamal Hossain, Front-End Developer, WordPress Developer, Web Designer Bangladesh, UI UX Designer, HTML5, CSS3, JavaScript, React, Elementor"
+    />
     <meta name="author" content="Md. Tamal Hossain" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <link rel="canonical" href="https://tamalhossain.netlify.app/" />
 
-    <!-- Dynamic Favicon -->
-    <link id="dynFavicon" rel="icon" type="image/png" href="./assets/img/favicon.ico" />
+    <!-- Open Graph / Social Preview -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tamalhossain.netlify.app/" />
+    <meta
+      property="og:title"
+      content="Md. Tamal Hossain | Front-End & WordPress Developer"
+    />
+    <meta
+      property="og:description"
+      content="Front-End Developer and Creative Designer creating modern interfaces, responsive websites, and visually compelling digital experiences."
+    />
+    <meta
+      property="og:image"
+      content="https://tamalhossain.netlify.app/assets/img/profile-pic.png"
+    />
+    <meta property="og:site_name" content="Tamal Hossain Portfolio" />
 
-    <!-- Fonts & Icons -->
+    <!-- Twitter Preview -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@tamalhossain123" />
+    <meta name="twitter:creator" content="@tamalhossain123" />
+    <meta
+      name="twitter:title"
+      content="Md. Tamal Hossain | Front-End & WordPress Developer"
+    />
+    <meta
+      name="twitter:description"
+      content="Front-End Developer and Creative Designer creating modern interfaces and digital experiences."
+    />
+    <meta
+      name="twitter:image"
+      content="https://tamalhossain.netlify.app/assets/img/profile-pic.png"
+    />
+
+    <!-- JSON-LD Schema.org -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Md. Tamal Hossain",
+        "alternateName": "Tamal Hossain",
+        "url": "https://tamalhossain.netlify.app/",
+        "image": "https://tamalhossain.netlify.app/assets/img/profile-pic.png",
+        "jobTitle": "Front-End Developer & WordPress Specialist",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Barishal Sadar",
+          "addressRegion": "Barishal",
+          "postalCode": "8200",
+          "addressCountry": "Bangladesh"
+        },
+        "email": "tamalhossain908@gmail.com",
+        "telephone": "+8801730048626",
+        "sameAs": [
+          "https://github.com/tamalhossain123",
+          "https://www.facebook.com/iamtamal1",
+          "https://x.com/tamalhossain123",
+          "https://www.upwork.com/freelancers/~01a10fab5dc1d5b765",
+          "https://www.instagram.com/iamtamal3",
+          "https://www.pinterest.com/tamalhossain123/_profile/"
+        ]
+      }
+    </script>
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="./assets/img/favicon.ico"
+    />
+
+    <!-- Fonts & Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheets (All original local paths preserved) -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="assets/fonts/themify-icons.css" />
     <link rel="stylesheet" href="assets/css/materialdesignicons-min.css" />
+    <link rel="stylesheet" href="assets/owlcarousel/css/owl.carousel.css" />
+    <link rel="stylesheet" href="assets/owlcarousel/css/owl.theme.css" />
     <link rel="stylesheet" href="./assets/css/aos.css" />
+    <link rel="stylesheet" href="assets/css/venobox.css" />
+    <link rel="stylesheet" href="assets/css/animate.css" />
+    <link rel="stylesheet" href="assets/css/magic-mouse.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
   </head>
 
   <body>
-    <!-- PRELOADER -->
+    <!-- ULTRA FAST PRELOADER -->
     <div class="preloader" id="preloader">
       <div class="spinner">
         <div class="double-bounce1"></div>
@@ -35,116 +133,455 @@
       </div>
     </div>
 
+    <!-- BACKGROUND ANIMATED CANVAS -->
     <canvas id="bgCanvas"></canvas>
 
     <!-- NAVBAR -->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top navbar-custom">
       <div class="container">
-        <a class="navbar-brand" href="#home">
-          <img id="dynNavLogo" src="assets/img/logo.png" alt="Logo" />
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <a class="navbar-brand" href="#home"
+          ><img src="assets/img/logo.png" alt="Md. Tamal Hossain Logo"
+        /></a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="mdi mdi-menu"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul id="navbar-navlist" class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="#service">Services</a></li>
-            <li class="nav-item"><a class="nav-link" href="#technologies">Technologies</a></li>
-            <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
-            <li class="nav-item"><a class="nav-link" href="#resume">Resume</a></li>
-            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+            <li class="nav-item">
+              <a class="nav-link active" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#service">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#technologies">Technologies</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#portfolio">Portfolio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#resume">Resume</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact">Contact</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- HERO SECTION -->
-    <section id="home" class="home_bg hero-section" style="background-image: url(assets/img/banner.png)">
+    <!-- START HERO SECTION -->
+    <section
+      id="home"
+      class="home_bg hero-section"
+      style="background-image: url(assets/img/banner.png)"
+    >
+      <div id="particles-js"></div>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-10 col-md-12 text-center">
-            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+            <div
+              class="hero-content"
+              data-aos="fade-up"
+              data-aos-duration="1000"
+            >
+              <!-- Greeting Badge -->
               <div class="hero-badge">
-                <span id="dynSubtitle">👋 Hi There! I'm</span>
+                <span>👋 <span id="dynSubtitle">Hi There! I'm</span></span>
               </div>
-              <h1 class="hero-name" id="dynHeroName">Md. Tamal Hossain</h1>
+
+              <!-- Main Name Heading -->
+              <h1 class="hero-name">Md. Tamal Hossain</h1>
+
+              <!-- Dynamic Typing Titles -->
               <div class="hero-typing-box">
                 <span class="typing-prefix">I am a </span>
-                <span class="typewrite" id="typewriteHeading" data-period="2000" data-type='["Front-End Developer", "WordPress Specialist"]'>
+                <span
+                  class="typewrite"
+                  id="typewriteHeading"
+                  data-period="2000"
+                  data-type='["Front-End Developer", "WordPress Specialist", "UI/UX Designer", "Graphic Designer"]'
+                >
                   <span class="wrap"></span>
                 </span>
               </div>
-              <p class="hero-bio" id="dynHeroBio"></p>
+
+              <!-- Short Intro / Bio -->
+              <p class="hero-bio" id="dynHeroBio">
+                Crafting high-performance, modern web interfaces and intuitive
+                digital experiences with a clean, user-centric design approach.
+              </p>
+
+              <!-- CTA Action Buttons -->
               <div class="hero-btn-group">
-                <a href="#contact" id="dynBtnSayHello" class="btn-main">
+                <a href="#contact" class="btn-main">
                   Say Hello <i class="fa-solid fa-paper-plane ms-2"></i>
                 </a>
-                <a href="#portfolio" id="dynBtnPortfolio" class="btn-sub">
+                <a href="#portfolio" class="btn-sub">
                   My Portfolio <i class="fa-solid fa-arrow-right ms-2"></i>
                 </a>
               </div>
-              <!-- Dynamic Hero Social Dock -->
+
+              <!-- Liquid Glass Social Dock -->
               <div class="hero-social-wrapper">
-                <div class="social-dock" id="dynHeroSocialDock"></div>
+                <div class="social-dock">
+                  <a
+                    target="_blank"
+                    href="https://github.com/tamalhossain123"
+                    class="social-dock-btn"
+                    aria-label="GitHub"
+                  >
+                    <i class="fa-brands fa-github"></i>
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.linkedin.com/in/iamtamal1"
+                    class="social-dock-btn"
+                    aria-label="LinkedIn"
+                  >
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.upwork.com/freelancers/~01a10fab5dc1d5b765"
+                    class="social-dock-btn"
+                    aria-label="Upwork"
+                  >
+                    <i class="fa-brands fa-upwork"></i>
+                    <span>Upwork</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://x.com/tamalhossain123"
+                    class="social-dock-btn"
+                    aria-label="Twitter"
+                  >
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>Twitter</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.facebook.com/iamtamal1"
+                    class="social-dock-btn"
+                    aria-label="Facebook"
+                  >
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <span>Facebook</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://wa.me/qr/A4ODBWOWFBRPF1"
+                    class="social-dock-btn"
+                    aria-label="WhatsApp"
+                  >
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- END HERO SECTION -->
 
-    <!-- ABOUT SECTION -->
+    <!-- START ABOUT SECTION (Centered Circular Avatar Style) -->
     <section id="about" class="about_area section-padding">
       <div class="container">
+        <!-- Centered Profile Layout -->
         <div class="row justify-content-center">
-          <div class="col-lg-10 col-md-12 text-center" data-aos="fade-up">
+          <div
+            class="col-lg-10 col-md-12 text-center"
+            data-aos="fade-up"
+            data-aos-duration="1000"
+          >
+            <!-- Circular Avatar with Subtle Glow -->
             <div class="about-avatar-box">
-              <img id="dynProfileImg" src="assets/img/profile-pic.png" alt="Profile" class="about-avatar-img" />
+              <img
+                id="dynProfileImg"
+                src="assets/img/profile-pic.png"
+                alt="Md. Tamal Hossain"
+                class="about-avatar-img"
+                loading="lazy"
+              />
             </div>
-            <h3 class="about-heading" id="dynIntroTitle"></h3>
-            <div class="about-bio-content" id="dynAboutBio"></div>
-            <a id="dynResumeBtn" href="#" target="_blank" class="btn-sub" style="display: none;">
-              My Resume <i class="ti-download"></i>
-            </a>
+
+            <!-- Centered Name & Title Heading -->
+            <h3 class="about-heading" id="dynIntroTitle">
+              <span class="about-name-highlight">Md. Tamal Hossain</span>
+              <span class="about-divider">-</span>
+              <span class="about-role-highlight"
+                >Front-End & WordPress Developer</span
+              >
+            </h3>
+
+            <!-- Centered Bio Paragraphs -->
+            <div class="about-bio-content" id="dynAboutBio">
+              <p>
+                I am a passionate Front-End Developer and Creative Designer
+                dedicated to building high-performance, accessible, and visually
+                compelling web applications. With expertise spanning modern
+                JavaScript frameworks, custom WordPress architectures, and
+                intuitive UI/UX design, I bridge the gap between creative visual
+                concepts and robust code.
+              </p>
+              <p>
+                Every project is approached with precision—focusing on clean
+                code, seamless user journeys, and search-optimized structure.
+                Whether crafting bespoke e-commerce platforms or modern
+                corporate landing pages, my objective is delivering impactful
+                digital experiences that drive measurable results.
+              </p>
+            </div>
+
+            <a href="#" class="btn-sub"
+              >My Resume <i class="ti-download"></i
+            ></a>
           </div>
         </div>
       </div>
     </section>
+    <!-- END ABOUT SECTION -->
 
-    <!-- SKILLS SECTION -->
+    <!-- START SKILLS SECTION (2-Column Minimalist Style) -->
     <section id="skills" class="skills_area section-padding">
       <div class="container">
         <div class="row align-items-center">
-          <div class="col-lg-6 col-md-12 mb-5 mb-lg-0" data-aos="fade-right">
+          <!-- Left Column: Title & Descriptions -->
+          <div
+            class="col-lg-6 col-md-12 mb-5 mb-lg-0"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+          >
             <div class="skills-left-content">
-              <h2 class="skills-main-title">All the skills that I have in that field of work.</h2>
-              <p class="skills-description">With years of experience in web development and UI/UX design, I focus on delivering scalable, pixel-perfect, and user-centric solutions.</p>
+              <div class="skills-tag-wrapper"></div>
+              <h2 class="skills-main-title">
+                All the skills that I have in that field of work are mentioned.
+              </h2>
+              <p class="skills-description">
+                With years of hands-on experience in full-stack web development,
+                responsive front-end engineering, and graphic UI/UX design, I
+                focus on delivering scalable, pixel-perfect, and user-centric
+                solutions.
+              </p>
+              <p class="skills-description">
+                Each tool and technology has been mastered through real-world
+                client projects, ranging from custom WordPress e-commerce
+                portals to dynamic web applications built with modern web
+                standards.
+              </p>
             </div>
           </div>
-          <div class="col-lg-6 col-md-12" data-aos="fade-left">
-            <div class="skills-list-container" id="dynSkillsList"></div>
+
+          <!-- Right Column: Dynamic Progress Bars -->
+          <div
+            class="col-lg-6 col-md-12"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+          >
+            <div class="skills-list-container" id="dynSkillsList">
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">Photoshop</span>
+                  <span class="skill-percent" data-target="95">0%</span>
+                </div>
+                <div class="skill-progress-track">
+                  <div
+                    class="skill-progress-fill"
+                    data-percent="95"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">WordPress Development</span>
+                  <span class="skill-percent" data-target="90">0%</span>
+                </div>
+                <div class="skill-progress-track">
+                  <div
+                    class="skill-progress-fill"
+                    data-percent="90"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">Front-End (HTML / CSS / JS)</span>
+                  <span class="skill-percent" data-target="85">0%</span>
+                </div>
+                <div class="skill-progress-track">
+                  <div
+                    class="skill-progress-fill"
+                    data-percent="85"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">UI / UX Design</span>
+                  <span class="skill-percent" data-target="80">0%</span>
+                </div>
+                <div class="skill-progress-track">
+                  <div
+                    class="skill-progress-fill"
+                    data-percent="80"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">Adobe Illustrator</span>
+                  <span class="skill-percent" data-target="100">0%</span>
+                </div>
+                <div class="skill-progress-track">
+                  <div
+                    class="skill-progress-fill"
+                    data-percent="100"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- END SKILLS SECTION -->
 
     <!-- SERVICE SECTION -->
     <section id="service" class="service_area section-padding">
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
           <h2>What I'm Doing</h2>
-          <p>Delivering modern front-end solutions and creative designs.</p>
+          <p>
+            Delivering modern front-end solutions and creative graphic designs,
+            focused on high-quality visuals, <br />
+            user-friendly interfaces, and impactful digital experiences.
+          </p>
         </div>
-        <div class="row text-center" id="dynServicesList"></div>
+        <div class="row text-center">
+          <div
+            class="col-lg-4 col-md-6 col-sm-12"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <div class="serviceBox">
+              <div class="service-icon"><span class="ti-world"></span></div>
+              <h3 class="title">Web Design</h3>
+              <p class="description">
+                Designing modern, responsive websites with user-friendly
+                interfaces, clean layouts, and engaging digital experiences.
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-4 col-md-6 col-sm-12"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <div class="serviceBox">
+              <div class="service-icon"><span class="ti-wordpress"></span></div>
+              <h3 class="title">WordPress Development</h3>
+              <p class="description">
+                Building responsive, customizable WordPress websites with clean
+                structure, WooCommerce setup, and seamless UX.
+              </p>
+            </div>
+          </div>
+          <div
+            class="col-lg-4 col-md-6 col-sm-12"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
+            <div class="serviceBox">
+              <div class="service-icon"><span class="ti-write"></span></div>
+              <h3 class="title">Graphic & UI Design</h3>
+              <p class="description">
+                Creating visually compelling graphics and intuitive UI designs
+                that enhance user experience and brand identity.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- FUNFACT SECTION -->
-    <section id="funfact" class="funfact_area section-padding counter_feature" style="background-image: url('assets/img/client-banner.png'); background-attachment: fixed; background-size: cover; background-position: center;">
+    <section
+      id="funfact"
+      class="funfact_area section-padding counter_feature"
+      style="
+        background-image: url(&quot;assets/img/client-banner.png&quot;);
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+      "
+    >
       <div class="container">
-        <div class="row text-center" id="dynFunfactsList"></div>
+        <div class="row text-center">
+          <div
+            class="col-lg-3 col-sm-6 col-12"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
+            <div class="sp">
+              <h2 class="counter-num">90</h2>
+              <h3>Happy Clients</h3>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-sm-6 col-12"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
+            <div class="sp">
+              <h2 class="counter-num">110</h2>
+              <h3>Successful Projects</h3>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-sm-6 col-12"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
+            <div class="sp">
+              <h2 class="counter-num">7</h2>
+              <h3>Web Projects</h3>
+            </div>
+          </div>
+          <div
+            class="col-lg-3 col-sm-6 col-12"
+            data-aos="fade-up"
+            data-aos-delay="400"
+          >
+            <div class="sp">
+              <h2 class="counter-num">120</h2>
+              <h3>Graphic & UI Projects</h3>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -153,140 +590,747 @@
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
           <h2>Technologies</h2>
-          <p>Experienced with modern design tools and web technologies.</p>
+          <p>
+            Experienced with modern design tools and web technologies, <br />
+            ensuring efficient workflows and high-quality creative outputs.
+          </p>
         </div>
-        <div class="tech-grid" id="dynTechGrid" data-aos="fade-up"></div>
+        <div class="tech-grid" data-aos="fade-up" data-aos-delay="100">
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/bootstrap.png"
+              alt="Bootstrap"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/html.png"
+              alt="HTML5"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/css.png"
+              alt="CSS3"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/JavaScript-Logo.png"
+              alt="JavaScript"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/figma.png"
+              alt="Figma"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/xd.png"
+              alt="Adobe XD"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/photoshop-01.png"
+              alt="Adobe Photoshop"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/illustrator.png"
+              alt="Adobe Illustrator"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/wordpress-01.png"
+              alt="WordPress"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+          <div class="tec-item">
+            <img
+              src="./assets/img/Technologies/elementor.png"
+              alt="Elementor"
+              class="img-fluid"
+              loading="lazy"
+            />
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- PORTFOLIO SECTION -->
+    <!-- START PORTFOLIO SECTION -->
     <section id="portfolio" class="portfolio_area section-padding">
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
           <h2>The Projects</h2>
-          <p>Showcasing a curated selection of my recent works.</p>
+          <p>
+            Showcasing a curated selection of my recent creative and technical
+            projects, focused on quality, usability, and impact.
+          </p>
         </div>
+
+        <!-- Filter Buttons -->
         <div class="row">
           <div class="col-12 text-center">
-            <div class="portfolio_filter" data-aos="fade-up">
-              <ul id="dynFilterList">
+            <div
+              class="portfolio_filter"
+              data-aos="fade-up"
+              data-aos-delay="100"
+            >
+              <ul>
                 <li class="filter active" data-filter="all">All Projects</li>
+                <li class="filter" data-filter=".website">Website</li>
+                <li class="filter" data-filter=".wordpress">WordPress</li>
+                <li class="filter" data-filter=".photoshop">Photoshop</li>
+                <li class="filter" data-filter=".illustrator">Illustrator</li>
               </ul>
             </div>
           </div>
         </div>
-        <div class="row portfolio_item" id="dynPortfolioGrid" data-aos="fade-up"></div>
+
+        <!-- Unified Portfolio Grid -->
+        <div
+          class="row portfolio_item"
+          id="dynPortfolioGrid"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <!-- 1. Website Project (Manual Scrollable Mockup) -->
+          <div class="col-lg-4 col-md-6 col-12 mix website mb-4">
+            <div class="portfolio-card">
+              <div class="browser-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="browser-title">MARBLE Agency Landing Page</span>
+              </div>
+              <div class="card-screen-scroll">
+                <img
+                  src="assets/img/portfolio/website/1.jpg"
+                  alt="MARBLE Agency Landing Page"
+                  loading="lazy"
+                />
+              </div>
+              <div class="card-meta">
+                <div class="meta-text">
+                  <span class="meta-cat">Website</span>
+                  <h3 class="title">MARBLE Agency</h3>
+                  <p class="desc">
+                    Responsive web interface for digital agency
+                  </p>
+                </div>
+                <div class="meta-action">
+                  <a
+                    href="https://tamalhossain123.github.io/MARBLE/"
+                    target="_blank"
+                    class="port-btn"
+                    title="Live Preview"
+                    ><i class="fa fa-link"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. WordPress Project (Manual Scrollable Mockup) -->
+          <div class="col-lg-4 col-md-6 col-12 mix wordpress mb-4">
+            <div class="portfolio-card">
+              <div class="browser-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="browser-title">Skylar Larkyn Consulting</span>
+              </div>
+              <div class="card-screen-scroll">
+                <img
+                  src="assets/img/portfolio/wordpress/1.png"
+                  alt="Skylar Larkyn Consulting"
+                  loading="lazy"
+                />
+              </div>
+              <div class="card-meta">
+                <div class="meta-text">
+                  <span class="meta-cat">WordPress</span>
+                  <h3 class="title">Skylar Larkyn</h3>
+                  <p class="desc">Business Consulting Portfolio Website</p>
+                </div>
+                <div class="meta-action">
+                  <a
+                    href="https://skylarlarkyn.com/"
+                    target="_blank"
+                    class="port-btn"
+                    title="Live Preview"
+                    ><i class="fa fa-link"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Photoshop Graphic Card -->
+          <div class="col-lg-4 col-md-6 col-12 mix photoshop mb-4">
+            <div class="portfolio-card">
+              <div class="browser-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="browser-title">Social Media Poster</span>
+              </div>
+              <div class="card-screen-graphic">
+                <img
+                  src="assets/img/portfolio/photoshop/1.jpg"
+                  alt="Social Media Poster Design - Shoily"
+                  loading="lazy"
+                />
+                <button
+                  type="button"
+                  class="graphic-zoom-overlay"
+                  onclick="
+                    openLightbox(
+                      'assets/img/portfolio/photoshop/1.jpg',
+                      'Social Media Poster Design - Shoily',
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+              </div>
+              <div class="card-meta">
+                <div class="meta-text">
+                  <span class="meta-cat">Photoshop</span>
+                  <h3 class="title">Social Media Poster</h3>
+                  <p class="desc">Created for clothing brand Shoily...</p>
+                </div>
+                <div class="meta-action">
+                  <button
+                    type="button"
+                    onclick="
+                      openLightbox(
+                        'assets/img/portfolio/photoshop/1.jpg',
+                        'Social Media Poster Design - Shoily',
+                      )
+                    "
+                    class="port-btn"
+                    title="Zoom Preview"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Illustrator Graphic Card -->
+          <div class="col-lg-4 col-md-6 col-12 mix illustrator mb-4">
+            <div class="portfolio-card">
+              <div class="browser-bar">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+                <span class="browser-title">Logo Design</span>
+              </div>
+              <div class="card-screen-graphic">
+                <img
+                  src="assets/img/portfolio/illustrator/5.jpg"
+                  alt="Shoily Clothing Brand Logo Design"
+                  loading="lazy"
+                />
+                <button
+                  type="button"
+                  class="graphic-zoom-overlay"
+                  onclick="
+                    openLightbox(
+                      'assets/img/portfolio/illustrator/5.jpg',
+                      'Shoily Clothing Brand Logo Design',
+                    )
+                  "
+                >
+                  <i class="fa-solid fa-magnifying-glass-plus"></i>
+                </button>
+              </div>
+              <div class="card-meta">
+                <div class="meta-text">
+                  <span class="meta-cat">Illustrator</span>
+                  <h3 class="title">Logo Design</h3>
+                  <p class="desc">Minimalist vector logo for Shoily...</p>
+                </div>
+                <div class="meta-action">
+                  <button
+                    type="button"
+                    onclick="
+                      openLightbox(
+                        'assets/img/portfolio/illustrator/5.jpg',
+                        'Shoily Clothing Brand Logo Design',
+                      )
+                    "
+                    class="port-btn"
+                    title="Zoom Preview"
+                  >
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- View More Button -->
+        <div class="view-more-container text-center mt-4">
+          <button id="viewMoreBtn" class="view-more-btn">
+            View All Projects
+          </button>
+        </div>
       </div>
     </section>
+    <!-- END PORTFOLIO SECTION -->
 
-    <!-- LIGHTBOX MODAL -->
-    <div id="imageLightbox" class="lightbox-modal" onclick="handleLightboxBackdrop(event)">
-      <button type="button" class="lightbox-close-btn" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+    <!-- SMOOTH IMAGE LIGHTBOX MODAL WITH CLOSE BUTTON -->
+    <div
+      id="imageLightbox"
+      class="lightbox-modal"
+      onclick="handleLightboxBackdrop(event)"
+    >
+      <button
+        type="button"
+        class="lightbox-close-btn"
+        onclick="closeLightbox()"
+        aria-label="Close Lightbox"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
       <div class="lightbox-inner" onclick="event.stopPropagation()">
-        <img id="lightboxImg" src="" alt="Zoom Preview" />
+        <img id="lightboxImg" src="" alt="Project Zoom Preview" />
         <h4 id="lightboxTitle" class="lightbox-caption"></h4>
       </div>
     </div>
 
-    <!-- RESUME SECTION -->
+    <!-- START RESUME / EDUCATION & EXPERIENCE SECTION -->
     <section id="resume" class="resume_area section-padding">
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
           <h2>Resume</h2>
-          <p>Highlighting my educational background and versatile professional experience.</p>
+          <p>
+            Highlighting my strong educational background and versatile
+            professional experience across web and design.
+          </p>
         </div>
+
         <div class="row">
-          <div class="col-lg-6 col-md-12 mb-5 mb-lg-0" data-aos="fade-up">
+          <!-- 1. Experience Column -->
+          <div
+            class="col-lg-6 col-md-12 mb-5 mb-lg-0"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
             <div class="timeline-column-header">
-              <div class="timeline-icon-box"><i class="fa-solid fa-briefcase"></i></div>
+              <div class="timeline-icon-box">
+                <i class="fa-solid fa-briefcase"></i>
+              </div>
               <h3 class="timeline-col-title">Experience</h3>
             </div>
-            <div class="timeline-track" id="dynExpContainer"></div>
+
+            <div class="timeline-track" id="dynExpContainer">
+              <!-- Item 1 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">IT Consultant</h4>
+                    <span class="timeline-badge">2025 - Present</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-regular fa-building me-2"></i>Elevex Mart
+                    International
+                  </h5>
+                  <p class="timeline-desc">
+                    Managing end-to-end website optimization, adding features,
+                    bug fixing, and designing high-impact visual mockups and
+                    marketing assets.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">IT Consultant & Designer</h4>
+                    <span class="timeline-badge">2024 - 2025</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-regular fa-building me-2"></i>Sunny Travels and
+                    Tour Ltd.
+                  </h5>
+                  <p class="timeline-desc">
+                    Created corporate branding, designed promotional brochures,
+                    social media marketing content, and executed travel
+                    campaigns.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">Sales Engineer</h4>
+                    <span class="timeline-badge">2023 - 2024</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-regular fa-building me-2"></i>Suntech HVAC
+                    Engineering Ltd.
+                  </h5>
+                  <p class="timeline-desc">
+                    Managed key client relationships, drafted technical HVAC
+                    proposals, prepared cost estimations, and negotiated
+                    contracts.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-lg-6 col-md-12" data-aos="fade-up">
+
+          <!-- 2. Education Column -->
+          <div
+            class="col-lg-6 col-md-12"
+            data-aos="fade-up"
+            data-aos-delay="200"
+          >
             <div class="timeline-column-header">
-              <div class="timeline-icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
+              <div class="timeline-icon-box">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
               <h3 class="timeline-col-title">Education</h3>
             </div>
-            <div class="timeline-track" id="dynEduContainer"></div>
+
+            <div class="timeline-track" id="dynEduContainer">
+              <!-- Item 1 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">Web Design & Development</h4>
+                    <span class="timeline-badge">2025</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-solid fa-award me-2"></i>UY Lab
+                  </h5>
+                  <p class="timeline-desc">
+                    Comprehensive professional training in modern WordPress CMS,
+                    JavaScript ES6+, Bootstrap, and responsive UI layout
+                    systems.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">Diploma in Engineering</h4>
+                    <span class="timeline-badge">2023</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-solid fa-school me-2"></i>Bhola Polytechnic
+                    Institute
+                  </h5>
+                  <p class="timeline-desc">
+                    Four-year engineering diploma specializing in technical
+                    design, system analysis, and thermodynamics.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div class="timeline-card-header">
+                    <h4 class="timeline-role">Secondary School Certificate</h4>
+                    <span class="timeline-badge">2019</span>
+                  </div>
+                  <h5 class="timeline-company">
+                    <i class="fa-solid fa-book-open me-2"></i>Barishal Technical
+                    School & College
+                  </h5>
+                  <p class="timeline-desc">
+                    Completed secondary education with foundational coursework
+                    in Computer Science and mathematical principles.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- END RESUME SECTION -->
 
-    <!-- CONTACT SECTION -->
+    <!-- START CONTACT SECTION (Exact Match with Image) -->
     <section id="contact" class="contact_us section-padding">
       <div class="container">
         <div class="row">
-          <div class="col-lg-6 col-md-12 mb-5 mb-lg-0" data-aos="fade-right">
+          <!-- Left Column: Form -->
+          <div
+            class="col-lg-6 col-md-12 mb-5 mb-lg-0"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+          >
             <div class="contact-form-wrapper">
               <h2 class="contact-section-title">Just say Hello</h2>
+
               <form class="contact-modern-form" id="contactForm">
-                <input type="hidden" name="access_key" value="59d5071f-50e7-479d-9ed4-2bebb97655fd" />
-                <div class="form-group mb-3"><input type="text" name="name" class="form-control-modern" placeholder="Your Name" required /></div>
-                <div class="form-group mb-3"><input type="email" name="email" class="form-control-modern" placeholder="Your Email" required /></div>
-                <div class="form-group mb-3"><input type="text" name="subject_text" class="form-control-modern" placeholder="Your Subject" required /></div>
-                <div class="form-group mb-4"><textarea rows="5" name="message" class="form-control-modern" placeholder="Your Message" required></textarea></div>
-                <button type="submit" class="btn-main" id="submitBtn">Send Message <i class="fa-solid fa-paper-plane ms-2"></i></button>
+                <input
+                  type="hidden"
+                  name="access_key"
+                  value="59d5071f-50e7-479d-9ed4-2bebb97655fd"
+                />
+                <input
+                  type="hidden"
+                  name="subject"
+                  value="New Message from Your Portfolio"
+                />
+
+                <div class="form-group mb-3">
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control-modern"
+                    placeholder="Your Name"
+                    required
+                  />
+                </div>
+                <div class="form-group mb-3">
+                  <input
+                    type="email"
+                    name="email"
+                    class="form-control-modern"
+                    placeholder="Your Email"
+                    required
+                  />
+                </div>
+                <div class="form-group mb-3">
+                  <input
+                    type="text"
+                    name="subject_text"
+                    class="form-control-modern"
+                    placeholder="Your Subject"
+                    required
+                  />
+                </div>
+                <div class="form-group mb-4">
+                  <textarea
+                    rows="5"
+                    name="message"
+                    class="form-control-modern form-textarea-modern"
+                    placeholder="Your Message"
+                    required
+                  ></textarea>
+                </div>
+                <div>
+                  <button type="submit" class="btn-main" id="submitBtn">
+                    Send Message <i class="fa-solid fa-paper-plane ms-2"></i>
+                  </button>
+                </div>
               </form>
             </div>
           </div>
-          <div class="col-lg-6 col-md-12 ps-lg-5" data-aos="fade-left">
+
+          <!-- Right Column: Contact Info & Expanding Social Dock -->
+          <div
+            class="col-lg-6 col-md-12 ps-lg-5"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+          >
             <div class="contact-info-wrapper">
               <h2 class="contact-section-title">Contact Info</h2>
+              <p class="contact-intro-desc">
+                Feel free to get in touch with me. I am always open to
+                discussing new projects, creative ideas, or opportunities to be
+                part of your visions.
+              </p>
+
+              <!-- Contact Details List -->
               <div class="contact-details-list">
+                <!-- Email Item -->
                 <div class="contact-info-item">
-                  <div class="contact-info-icon"><i class="fa-solid fa-envelope"></i></div>
-                  <div class="contact-info-text"><h4>Email</h4><p id="dynContactEmail"></p></div>
+                  <div class="contact-info-icon">
+                    <i class="fa-solid fa-envelope"></i>
+                  </div>
+                  <div class="contact-info-text">
+                    <h4>Email</h4>
+                    <p id="dynContactEmail">tamalhossain908@gmail.com</p>
+                  </div>
                 </div>
+
+                <!-- Phone Item -->
                 <div class="contact-info-item">
-                  <div class="contact-info-icon"><i class="fa-solid fa-phone"></i></div>
-                  <div class="contact-info-text"><h4>Phone</h4><p id="dynContactPhone"></p></div>
+                  <div class="contact-info-icon">
+                    <i class="fa-solid fa-phone"></i>
+                  </div>
+                  <div class="contact-info-text">
+                    <h4>Phone</h4>
+                    <p id="dynContactPhone">+880 1730 048626</p>
+                  </div>
                 </div>
+
+                <!-- Address Item -->
                 <div class="contact-info-item">
-                  <div class="contact-info-icon"><i class="fa-solid fa-location-dot"></i></div>
-                  <div class="contact-info-text"><h4>Address</h4><p id="dynContactAddress"></p></div>
+                  <div class="contact-info-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                  </div>
+                  <div class="contact-info-text">
+                    <h4>Address</h4>
+                    <p id="dynContactAddress">
+                      Barishal Sadar, Barishal-8200, Bangladesh
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              <!-- Social Profiles Dock Section -->
               <div class="contact-social-section">
-                <span class="contact-social-prompt">Visit my social profile and get connected</span>
-                <div class="social-dock mt-3" id="dynContactSocialDock"></div>
+                <span class="contact-social-prompt"
+                  >Visit my social profile and get connected</span
+                >
+                <div class="social-dock mt-3">
+                  <a
+                    target="_blank"
+                    href="https://github.com/tamalhossain123"
+                    class="social-dock-btn"
+                    aria-label="GitHub"
+                  >
+                    <i class="fa-brands fa-github"></i>
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.linkedin.com/in/iamtamal1"
+                    class="social-dock-btn"
+                    aria-label="LinkedIn"
+                  >
+                    <i class="fa-brands fa-linkedin-in"></i>
+                    <span>LinkedIn</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.upwork.com/freelancers/~01a10fab5dc1d5b765"
+                    class="social-dock-btn"
+                    aria-label="Upwork"
+                  >
+                    <i class="fa-brands fa-upwork"></i>
+                    <span>Upwork</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://x.com/tamalhossain123"
+                    class="social-dock-btn"
+                    aria-label="Twitter"
+                  >
+                    <i class="fa-brands fa-x-twitter"></i>
+                    <span>Twitter</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://www.facebook.com/iamtamal1"
+                    class="social-dock-btn"
+                    aria-label="Facebook"
+                  >
+                    <i class="fa-brands fa-facebook-f"></i>
+                    <span>Facebook</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    href="https://wa.me/qr/A4ODBWOWFBRPF1"
+                    class="social-dock-btn"
+                    aria-label="WhatsApp"
+                  >
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- END CONTACT SECTION -->
 
-    <!-- LIVE CHAT WIDGET -->
-    <div class="live-chat-wrapper" id="liveChatWrapper">
-      <div class="live-chat-box" id="liveChatBox">
-        <div class="live-chat-header">
-          <div class="chat-header-avatar">
-            <img id="dynChatAvatar" src="assets/img/profile-pic.png" alt="Avatar" />
-            <span class="chat-online-badge"></span>
-          </div>
-          <div class="chat-header-info">
-            <h4 id="dynChatName">Md. Tamal Hossain</h4>
-            <p><span class="live-dot"></span> Active Now</p>
-          </div>
-          <button type="button" class="chat-close-btn" onclick="toggleLiveChat()">&times;</button>
+    <!-- THANK YOU POPUP MODAL (Fixed Overlay) -->
+    <div id="thankYouPopup" class="popup-overlay" style="display: none">
+      <div class="popup-content">
+        <div class="popup-check-icon">
+          <i class="fa-solid fa-check"></i>
         </div>
-        <div class="live-chat-body" id="liveChatBody">
-          <div class="chat-msg chat-incoming"><p>Hello! 👋 Welcome to my portfolio.</p></div>
-        </div>
-        <form class="live-chat-footer" onsubmit="sendLiveMessage(event)">
-          <input type="text" id="liveUserMessage" placeholder="Write a message..." required />
-          <button type="submit" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-        </form>
+        <h3>Thank You!</h3>
+        <p>Your message has been sent successfully.</p>
+        <p>I will contact you very soon.</p>
+        <button type="button" class="popup-close-btn" onclick="closePopup()">
+          OK
+        </button>
       </div>
-      <button type="button" class="live-chat-trigger" onclick="toggleLiveChat()"><i class="fa-solid fa-comment-dots"></i></button>
     </div>
 
-    <!-- Scripts -->
+    
+  
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 text-center">
+            <p class="copyright">
+              Copyright &copy; 2026 | All Rights Reserved Md. Tamal Hossain.
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts (All original local paths preserved) -->
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/owlcarousel/js/owl.carousel.min.js"></script>
+    <script src="assets/js/jquery.inview.min.js"></script>
+    <script src="assets/js/jquery.appear.js"></script>
     <script src="./assets/js/aos.js"></script>
+    <script src="assets/js/venobox.min.js"></script>
+    <script src="assets/js/jquery.stellar.min.js"></script>
+    <script src="assets/js/animated-text.js"></script>  
+    <script src="assets/js/animated-text-dark.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/scrolltopcontrol.js"></script>
+    <script src="assets/js/magic_mouse.js"></script>
     <script src="assets/js/scripts.js"></script>
+  </body>
+</html>
+
+
   </body>
 </html>
