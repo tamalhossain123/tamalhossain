@@ -163,6 +163,10 @@ ul, li { list-style: none; }
     height: auto; 
 }
 
+.navbar-toggler{
+    color: #fff !important;
+}
+
 .navbar-custom {
     padding: 22px 0;
     z-index: 999;
