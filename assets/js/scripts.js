@@ -1,420 +1,728 @@
 /**
- * Md. Tamal Hossain Portfolio - Universal Realtime Dynamic Engine
+ * Md. Tamal Hossain Portfolio - Core Engine (High-Performance Sync)
+ * Features: Zero-Lag Cache Hydration + Smart Preloader + Canvas Particles + Lightbox + Live Chat
  */
+
 (function() {
     'use strict';
 
+    // ১. ব্যাকএন্ড URL কনফিগারেশন
     const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000'
         : 'https://tamalhossain-backend.vercel.app';
 
-    const API_PROFILE = `${BACKEND_URL}/api/profile`;
-    const API_PROJECTS = `${BACKEND_URL}/api/projects`;
+    const API_BASE = `${BACKEND_URL}/api`;
+    const BACKEND_SOCKET_URL = BACKEND_URL;
 
-    function resolveImageUrl(url) {
-        if (!url) return 'assets/img/profile-pic.png';
-        if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:') || url.startsWith('./') || url.startsWith('assets/')) {
-            return url;
+    // ইমেজ পাথ ঠিক করার হেল্পার ফাংশন
+    function resolveImageUrl(imgUrl) {
+        if (!imgUrl) return 'assets/img/profile-pic.png';
+        if (imgUrl.startsWith('http://') || imgUrl.startsWith('https://') || imgUrl.startsWith('//') || imgUrl.startsWith('data:')) {
+            return imgUrl;
         }
-        return `${BACKEND_URL}${url.startsWith('/') ? '' : '/'}${url}`;
+        return `${BACKEND_URL}${imgUrl.startsWith('/') ? '' : '/'}${imgUrl}`;
     }
 
-    // প্রিলোডার ডিমিস
+    /* ==========================================================================
+       1. SMART PRELOADER (ডাটা লোড হওয়া পর্যন্ত স্ক্রিন স্মুথ রাখবে)
+       ========================================================================== */
+    let preloaderDismissed = false;
     function dismissPreloader() {
+        if (preloaderDismissed) return;
+        preloaderDismissed = true;
+
         const preloader = document.getElementById('preloader');
         if (preloader) {
             preloader.style.transition = 'opacity 0.4s ease';
             preloader.style.opacity = '0';
-            setTimeout(() => { preloader.style.display = 'none'; }, 400);
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 400);
         }
     }
-    setTimeout(dismissPreloader, 1500);
 
-    /* ==========================================================
-       টাইপরাইটার এফেক্ট
-       ========================================================== */
-    function initTypewriter(words) {
-        const target = document.getElementById('typewriteHeading');
-        if (!target || !words || words.length === 0) return;
+    // ব্যাকএন্ড কানেকশন খুব ধীরগতির হলে সর্বোচ্চ ১২০০ms পর প্রিলোডার নিজে থেকেই সরে যাবে
+    const fallbackTimer = setTimeout(dismissPreloader, 1200);
 
-        let wordIdx = 0, charIdx = 0, isDeleting = false;
-        const wrap = target.querySelector('.wrap') || target;
-
-        function type() {
-            const current = words[wordIdx];
-            if (isDeleting) {
-                wrap.innerText = current.substring(0, charIdx - 1);
-                charIdx--;
-            } else {
-                wrap.innerText = current.substring(0, charIdx + 1);
-                charIdx++;
-            }
-
-            let speed = isDeleting ? 40 : 80;
-            if (!isDeleting && charIdx === current.length) {
-                speed = 2000;
-                isDeleting = true;
-            } else if (isDeleting && charIdx === 0) {
-                isDeleting = false;
-                wordIdx = (wordIdx + 1) % words.length;
-                speed = 500;
-            }
-            setTimeout(type, speed);
+    /* ==========================================================================
+       2. STICKY NAVBAR
+       ========================================================================== */
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (navbar) {
+            navbar.classList.toggle('nav-sticky', window.scrollY >= 50);
         }
-        type();
+    });
+
+    /* ==========================================================================
+       3. BACKGROUND CANVAS PARTICLES (60 FPS)
+       ========================================================================== */
+    const canvas = document.getElementById('bgCanvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = window.innerWidth < 768 ? 25 : 50;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 2 + 0.8,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4
+            });
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(240, 187, 98, 0.25)';
+            ctx.strokeStyle = 'rgba(240, 187, 98, 0.05)';
+
+            particles.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = idx + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
     }
 
-    /* ==========================================================
-       DOM আপডেট লজিক (সব কয়টি ফিল্ড)
-       ========================================================= */
+    /* ==========================================================================
+       4. SKILLS SCROLL ANIMATION & NUMBER COUNTER
+       ========================================================================== */
+    window.triggerSkillsAnimation = function() {
+        const skillsSection = document.getElementById('skills');
+        if (!skillsSection) return;
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.skill-progress-fill').forEach(bar => {
+                        const targetWidth = bar.getAttribute('data-percent') || '0';
+                        bar.style.width = targetWidth + '%';
+                    });
+
+                    entry.target.querySelectorAll('.skill-percent').forEach(label => {
+                        const targetNum = parseInt(label.getAttribute('data-target'), 10) || 0;
+                        let currentNum = 0;
+                        const duration = 1400;
+                        const stepTime = Math.abs(Math.floor(duration / (targetNum || 1)));
+
+                        const timer = setInterval(() => {
+                            currentNum += 1;
+                            label.innerText = currentNum + '%';
+                            if (currentNum >= targetNum) {
+                                clearInterval(timer);
+                                label.innerText = targetNum + '%';
+                            }
+                        }, stepTime);
+                    });
+
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.25 });
+
+        observer.observe(skillsSection);
+    };
+
+    window.updateSkillsFromBackend = function(skills) {
+        const sContainer = document.getElementById('dynSkillsList');
+        if (sContainer && skills && skills.length > 0) {
+            sContainer.innerHTML = skills.map(s => `
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">${s.name}</span>
+                        <span class="skill-percent" data-target="${s.percentage}">0%</span>
+                    </div>
+                    <div class="skill-progress-track">
+                        <div class="skill-progress-fill" data-percent="${s.percentage}" style="width: 0%;"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            window.triggerSkillsAnimation();
+        }
+    };
+
+    /* ==========================================================================
+       5. DYNAMIC DOM RENDERERS (DOM আপডেট লজিক)
+       ========================================================================== */
     function applyProfileToDOM(prof) {
         if (!prof) return;
 
-        // ১. ব্র্যান্ডিং ও হেড
-        if (prof.siteLogo) {
-            const logo = document.getElementById('dynNavLogo');
-            if (logo) logo.src = resolveImageUrl(prof.siteLogo);
-        }
-        if (prof.siteFavicon) {
-            const fav = document.getElementById('dynFavicon');
-            if (fav) fav.href = resolveImageUrl(prof.siteFavicon);
-        }
-
-        // ২. হিরো সেকশন
-        if (prof.badgeText) {
-            const b = document.getElementById('dynSubtitle');
-            if (b) b.innerText = prof.badgeText;
-        }
         if (prof.name) {
-            const n = document.getElementById('dynHeroName');
-            if (n) n.innerText = prof.name;
-            const chatN = document.getElementById('dynChatName');
-            if (chatN) chatN.innerText = prof.name;
+            const sub = document.getElementById('dynSubtitle');
+            if (sub) sub.innerText = `- I Am ${prof.name}`;
         }
-        if (prof.heroTagline) {
-            const bio = document.getElementById('dynHeroBio');
-            if (bio) bio.innerText = prof.heroTagline;
-        }
-        if (prof.btnSayHelloLink) {
-            const btn1 = document.getElementById('dynBtnSayHello');
-            if (btn1) btn1.href = prof.btnSayHelloLink;
-        }
-        if (prof.btnPortfolioLink) {
-            const btn2 = document.getElementById('dynBtnPortfolio');
-            if (btn2) btn2.href = prof.btnPortfolioLink;
-        }
-
-        // টাইপিং টাইটেলস
-        if (prof.typingTitles) {
-            const titlesArr = prof.typingTitles.split(',').map(s => s.trim()).filter(Boolean);
-            initTypewriter(titlesArr);
-        }
-
-        // সোশাল ডক (হিরো ও কনট্যাক্ট উভয়েই)
-        if (prof.socialLinks && prof.socialLinks.length > 0) {
-            const html = prof.socialLinks.map(s => `
-                <a target="_blank" href="${s.url}" class="social-dock-btn" aria-label="${s.name}">
-                    <i class="${s.icon}"></i>
-                    <span>${s.name}</span>
-                </a>
-            `).join('');
-            const hDock = document.getElementById('dynHeroSocialDock');
-            const cDock = document.getElementById('dynContactSocialDock');
-            if (hDock) hDock.innerHTML = html;
-            if (cDock) cDock.innerHTML = html;
-        }
-
-        // ৩. অ্যাবাউট, ছবি ও রেজুমে
-        if (prof.profileImage) {
-            const pImg = document.getElementById('dynProfileImg');
-            if (pImg) pImg.src = resolveImageUrl(prof.profileImage);
-            const cImg = document.getElementById('dynChatAvatar');
-            if (cImg) cImg.src = resolveImageUrl(prof.profileImage);
-        }
-        if (prof.name) {
-            const titleEl = document.getElementById('dynIntroTitle');
-            if (titleEl) {
-                const role = prof.typingTitles ? prof.typingTitles.split(',')[0].trim() : 'Developer';
-                titleEl.innerHTML = `<span class="about-name-highlight">${prof.name}</span> <span class="about-divider">-</span> <span class="about-role-highlight">${role}</span>`;
-            }
-        }
-        if (prof.aboutBio) {
-            const aBio = document.getElementById('dynAboutBio');
-            if (aBio) aBio.innerHTML = `<p>${prof.aboutBio}</p>`;
-        }
-        if (prof.resumeFile && prof.resumeFile !== '#') {
-            const resBtn = document.getElementById('dynResumeBtn');
-            if (resBtn) {
-                resBtn.href = resolveImageUrl(prof.resumeFile);
-                resBtn.style.display = 'inline-flex';
-            }
-        }
-
-        // ৪. সার্ভিসেস
-        if (prof.services && prof.services.length > 0) {
-            const sContainer = document.getElementById('dynServicesList');
-            if (sContainer) {
-                sContainer.innerHTML = prof.services.map(s => `
-                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4" data-aos="fade-up">
-                        <div class="serviceBox">
-                            <div class="service-icon"><span class="${s.icon}"></span></div>
-                            <h3 class="title">${s.title}</h3>
-                            <p class="description">${s.desc}</p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // ৫. ফানফ্যাক্টস
-        if (prof.funfacts && prof.funfacts.length > 0) {
-            const fContainer = document.getElementById('dynFunfactsList');
-            if (fContainer) {
-                fContainer.innerHTML = prof.funfacts.map(f => `
-                    <div class="col-lg-3 col-sm-6 col-12 mb-4" data-aos="fade-up">
-                        <div class="sp">
-                            <h2 class="counter-num">${f.number}</h2>
-                            <h3>${f.label}</h3>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // ৬. টেকনোলজি লোগো
-        if (prof.technologies && prof.technologies.length > 0) {
-            const tContainer = document.getElementById('dynTechGrid');
-            if (tContainer) {
-                tContainer.innerHTML = prof.technologies.map(t => `
-                    <div class="tec-item">
-                        <img src="${resolveImageUrl(t.logo)}" alt="${t.name}" class="img-fluid" loading="lazy" title="${t.name}" />
-                    </div>
-                `).join('');
-            }
-        }
-
-        // ৭. স্কিলস
-        if (prof.skills && prof.skills.length > 0) {
-            const skContainer = document.getElementById('dynSkillsList');
-            if (skContainer) {
-                skContainer.innerHTML = prof.skills.map(sk => `
-                    <div class="skill-item">
-                        <div class="skill-info">
-                            <span class="skill-name">${sk.name}</span>
-                            <span class="skill-percent">${sk.percentage}%</span>
-                        </div>
-                        <div class="skill-progress-track">
-                            <div class="skill-progress-fill" style="width: ${sk.percentage}%;"></div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // ৮. এডুকেশন ও এক্সপেরিয়েন্স
-        if (prof.education && prof.education.length > 0) {
-            const eduC = document.getElementById('dynEduContainer');
-            if (eduC) {
-                eduC.innerHTML = prof.education.map(e => `
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-card">
-                            <div class="timeline-card-header">
-                                <h4 class="timeline-role">${e.degree}</h4>
-                                <span class="timeline-badge">${e.year}</span>
-                            </div>
-                            <h5 class="timeline-company"><i class="fa-solid fa-graduation-cap me-2"></i>${e.institute}</h5>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-        if (prof.experience && prof.experience.length > 0) {
-            const expC = document.getElementById('dynExpContainer');
-            if (expC) {
-                expC.innerHTML = prof.experience.map(x => `
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-card">
-                            <div class="timeline-card-header">
-                                <h4 class="timeline-role">${x.role}</h4>
-                                <span class="timeline-badge">${x.duration}</span>
-                            </div>
-                            <h5 class="timeline-company"><i class="fa-regular fa-building me-2"></i>${x.company}</h5>
-                            <p class="timeline-desc">${x.description}</p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // ৯. কনট্যাক্ট ইনফো
         if (prof.email) {
-            const em = document.getElementById('dynContactEmail');
-            if (em) em.innerText = prof.email;
+            const em1 = document.getElementById('dynEmail');
+            const em2 = document.getElementById('dynContactEmail');
+            if (em1) em1.innerText = prof.email;
+            if (em2) em2.innerText = prof.email;
         }
         if (prof.phone) {
-            const ph = document.getElementById('dynContactPhone');
-            if (ph) ph.innerText = prof.phone;
+            const ph1 = document.getElementById('dynPhone');
+            const ph2 = document.getElementById('dynContactPhone');
+            if (ph1) ph1.innerText = prof.phone;
+            if (ph2) ph2.innerText = prof.phone;
         }
         if (prof.address) {
-            const ad = document.getElementById('dynContactAddress');
-            if (ad) ad.innerText = prof.address;
+            const ad1 = document.getElementById('dynAddress');
+            const ad2 = document.getElementById('dynContactAddress');
+            if (ad1) ad1.innerText = prof.address;
+            if (ad2) ad2.innerText = prof.address;
+        }
+        if (prof.profileImage) {
+            const img = document.getElementById('dynProfileImg');
+            if (img) img.src = resolveImageUrl(prof.profileImage);
+        }
+        if (prof.aboutBio) {
+            const bio = document.getElementById('dynAboutBio');
+            if (bio) bio.innerHTML = `<p>${prof.aboutBio}</p>`;
         }
 
-        // ১০. পোর্টফোলিও ক্যাটাগরি ফিল্টার
-        if (prof.projectCategories && prof.projectCategories.length > 0) {
-            const fList = document.getElementById('dynFilterList');
-            if (fList) {
-                fList.innerHTML = `<li class="filter active" data-filter="all">All Projects</li>` +
-                    prof.projectCategories.map(cat => `
-                        <li class="filter" data-filter=".${cat.toLowerCase().replace(/\s+/g, '-')}">${cat}</li>
-                    `).join('');
+        if (prof.skills && prof.skills.length > 0) {
+            window.updateSkillsFromBackend(prof.skills);
+        }
 
-                // ফিল্টার ইভেন্ট বাইন্ডিং
-                fList.querySelectorAll('li').forEach(li => {
-                    li.addEventListener('click', function() {
-                        fList.querySelectorAll('li').forEach(btn => btn.classList.remove('active'));
-                        this.classList.add('active');
-                        const filter = this.getAttribute('data-filter');
-                        document.querySelectorAll('#dynPortfolioGrid .mix').forEach(item => {
-                            if (filter === 'all' || item.classList.contains(filter.replace('.', ''))) {
-                                item.style.display = 'block';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        });
-                    });
-                });
+        if (prof.education && prof.education.length > 0) {
+            const eContainer = document.getElementById('dynEduContainer');
+            if (eContainer) {
+                eContainer.innerHTML = prof.education.map(e => `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-card-header">
+                                <h4 class="timeline-role">${e.degree || ''}</h4>
+                                <span class="timeline-badge">${e.year || ''}</span>
+                            </div>
+                            <h5 class="timeline-company"><i class="fa-solid fa-award me-2"></i>${e.institute || ''}</h5>
+                            <p class="timeline-desc">${e.field ? e.field + ' - ' : ''}Formal academic curriculum and practical training.</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        if (prof.experience && prof.experience.length > 0) {
+            const expContainer = document.getElementById('dynExpContainer');
+            if (expContainer) {
+                expContainer.innerHTML = prof.experience.map(x => `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-card-header">
+                                <h4 class="timeline-role">${x.role || ''}</h4>
+                                <span class="timeline-badge">${x.duration || ''}</span>
+                            </div>
+                            <h5 class="timeline-company"><i class="fa-regular fa-building me-2"></i>${x.company || ''}</h5>
+                            <p class="timeline-desc">${x.description || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
             }
         }
     }
 
-    /* ==========================================================
-       পোর্টফোলিও প্রজেক্টস রেন্ডারার
-       ========================================================== */
     function applyProjectsToDOM(projects) {
+        if (!projects || projects.length === 0) return;
         const grid = document.getElementById('dynPortfolioGrid');
-        if (!grid || !projects || projects.length === 0) return;
+        if (!grid) return;
 
         grid.innerHTML = projects.map(p => {
-            const isScroll = p.scrollMode === 'scroll';
-            const isLightbox = p.actionType === 'lightbox';
-            const catClass = (p.category || 'website').toLowerCase().replace(/\s+/g, '-');
-            const imgUrl = resolveImageUrl(p.image);
+            const isWeb = p.category === 'website' || p.category === 'wordpress';
             const safeTitle = (p.title || '').replace(/'/g, "\\'");
+            const projectImg = resolveImageUrl(p.image);
 
-            return `
-                <div class="col-lg-4 col-md-6 col-12 mix ${catClass} mb-4">
-                    <div class="portfolio-card">
-                        <div class="browser-bar">
-                            <span class="dot dot-red"></span>
-                            <span class="dot dot-yellow"></span>
-                            <span class="dot dot-green"></span>
-                            <span class="browser-title">${p.title}</span>
-                        </div>
-                        <div class="${isScroll ? 'card-screen-scroll' : 'card-screen-graphic'}">
-                            <img src="${imgUrl}" alt="${p.title}" loading="lazy" />
-                            ${isLightbox ? `
-                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${imgUrl}', '${safeTitle}')">
-                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                </button>
-                            ` : ''}
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-text">
-                                <span class="meta-cat">${p.category}</span>
-                                <h3 class="title">${p.title}</h3>
-                                <p class="desc">${p.description || ''}</p>
+            if (isWeb) {
+                return `
+                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                        <div class="portfolio-card">
+                            <div class="browser-bar">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                                <span class="browser-title">${p.title}</span>
                             </div>
-                            <div class="meta-action">
-                                ${p.liveUrl && !isLightbox ? `
-                                    <a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview">
-                                        <i class="fa fa-link"></i>
-                                    </a>
-                                ` : `
-                                    <button type="button" onclick="openLightbox('${imgUrl}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                `}
+                            <div class="card-screen-scroll">
+                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
+                            </div>
+                            <div class="card-meta">
+                                <div class="meta-text">
+                                    <span class="meta-cat">${p.category}</span>
+                                    <h3 class="title">${p.title}</h3>
+                                    <p class="desc">${p.description || ''}</p>
+                                </div>
+                                <div class="meta-action">
+                                    ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview"><i class="fa fa-link"></i></a>` : ''}
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                return `
+                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                        <div class="portfolio-card">
+                            <div class="browser-bar">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                                <span class="browser-title">${p.title}</span>
+                            </div>
+                            <div class="card-screen-graphic">
+                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
+                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </button>
+                            </div>
+                            <div class="card-meta">
+                                <div class="meta-text">
+                                    <span class="meta-cat">${p.category}</span>
+                                    <h3 class="title">${p.title}</h3>
+                                    <p class="desc">${p.description || ''}</p>
+                                </div>
+                                <div class="meta-action">
+                                    <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }).join('');
     }
 
-    /* ==========================================================
-       সিঙ্ক ইঞ্জিন (লোকাল ক্যাশ + লাইভ ব্যাকএন্ড)
-       ========================================================== */
-    async function syncPortfolio() {
-        // ধাপ ১: ব্রাউজার ক্যাশ থেকে দ্রুত লোড
+    /* ==========================================================================
+       6. ZERO-LAG BACKEND SYNC (ক্যাশ ও লাইভ ডাটা ইন্টিগ্রেশন)
+       ========================================================================== */
+    async function syncPortfolioWithBackend() {
+        // ধাপ ১: ব্রাউজার ক্যাশে থাকা ডাটা দিয়ে পেজ ০ms-এ সাজিয়ে নেওয়া (কোনো ল্যাগ থাকবে না)
         try {
-            const cachedP = localStorage.getItem('cache_profile');
-            if (cachedP) applyProfileToDOM(JSON.parse(cachedP));
+            const cachedProf = localStorage.getItem('portfolio_cached_profile');
+            if (cachedProf) applyProfileToDOM(JSON.parse(cachedProf));
 
-            const cachedProj = localStorage.getItem('cache_projects');
+            const cachedProj = localStorage.getItem('portfolio_cached_projects');
             if (cachedProj) applyProjectsToDOM(JSON.parse(cachedProj));
-        } catch (e) {}
+        } catch (e) {
+            console.warn('Cache read error:', e);
+        }
 
-        // ধাপ ২: ব্যাকএন্ড থেকে নতুন ডাটা ফেচ
+        // ধাপ ২: ব্যাকএন্ড থেকে নতুন ডাটা ফেচ করা
         try {
-            const [pRes, projRes] = await Promise.all([
-                fetch(API_PROFILE).catch(() => null),
-                fetch(API_PROJECTS).catch(() => null)
+            const [profRes, projRes] = await Promise.all([
+                fetch(`${API_BASE}/profile`).catch(() => null),
+                fetch(`${API_BASE}/projects`).catch(() => null)
             ]);
 
-            if (pRes && pRes.ok) {
-                const profileData = await pRes.json();
-                applyProfileToDOM(profileData);
-                localStorage.setItem('cache_profile', JSON.stringify(profileData));
+            if (profRes && profRes.ok) {
+                const freshProfile = await profRes.json();
+                applyProfileToDOM(freshProfile);
+                localStorage.setItem('portfolio_cached_profile', JSON.stringify(freshProfile));
             }
+
             if (projRes && projRes.ok) {
-                const projectsData = await projRes.json();
-                applyProjectsToDOM(projectsData);
-                localStorage.setItem('cache_projects', JSON.stringify(projectsData));
+                const freshProjects = await projRes.json();
+                applyProjectsToDOM(freshProjects);
+                localStorage.setItem('portfolio_cached_projects', JSON.stringify(freshProjects));
             }
         } catch (err) {
-            console.error('Fetch error:', err);
+            console.log('Running on cached/offline content:', err);
         } finally {
+            // ডাটা সম্পূর্ণ আসার পর প্রিলোডার মসৃণভাবে সরিয়ে নেওয়া হবে
+            clearTimeout(fallbackTimer);
             dismissPreloader();
         }
     }
 
-    document.addEventListener('DOMContentLoaded', syncPortfolio);
+    /* ==========================================================================
+       7. PORTFOLIO FILTERING
+       ========================================================================== */
+    document.addEventListener('DOMContentLoaded', function() {
+        syncPortfolioWithBackend();
+        window.triggerSkillsAnimation();
 
-    // লাইটবক্স গ্লোবাল হ্যান্ডলার
-    window.openLightbox = function(src, title) {
+        const filterButtons = document.querySelectorAll('.portfolio_filter ul li');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                const filterValue = this.getAttribute('data-filter');
+                const items = document.querySelectorAll('#dynPortfolioGrid .mix');
+
+                items.forEach(item => {
+                    if (filterValue === 'all' || item.classList.contains(filterValue.replace('.', ''))) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    });
+
+    /* ==========================================================================
+       8. LIGHTBOX CONTROLS
+       ========================================================================== */
+    window.openLightbox = function(imageSrc, title) {
         const modal = document.getElementById('imageLightbox');
         const img = document.getElementById('lightboxImg');
-        const cap = document.getElementById('lightboxTitle');
-        if (modal && img) {
-            img.src = src;
-            if (cap) cap.innerText = title;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        const caption = document.getElementById('lightboxTitle');
+
+        if (!modal || !img) return;
+
+        img.src = imageSrc || '';
+        img.alt = title || 'Project Preview';
+        if (caption) caption.innerText = title || '';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
     };
+
     window.closeLightbox = function() {
         const modal = document.getElementById('imageLightbox');
-        if (modal) {
-            modal.classList.remove('active');
-            document.body.style.overflow = '';
+        const img = document.getElementById('lightboxImg');
+
+        if (modal) modal.classList.remove('active');
+        if (img) img.src = '';
+        document.body.style.overflow = '';
+    };
+
+    window.handleLightboxBackdrop = function(e) {
+        if (e && e.target && e.target.id === 'imageLightbox') {
+            window.closeLightbox();
         }
     };
-    window.handleLightboxBackdrop = function(e) {
-        if (e && e.target && e.target.id === 'imageLightbox') closeLightbox();
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            window.closeLightbox();
+        }
+    });
+
+    /* ==========================================================================
+       9. CONTACT FORM SUBMISSION (Web3Forms)
+       ========================================================================== */
+    const form = document.getElementById('contactForm');
+    const popup = document.getElementById('thankYouPopup');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Sending...";
+            submitBtn.disabled = true;
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(res => {
+                if (res.ok) {
+                    if (popup) popup.style.display = 'flex';
+                    form.reset();
+                } else {
+                    alert("Something went wrong, please try again.");
+                }
+            })
+            .catch(() => alert("Network error, please try again."))
+            .finally(() => {
+                submitBtn.innerText = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+    }
+
+    window.closePopup = function() {
+        if (popup) popup.style.display = 'none';
     };
 
-    window.toggleLiveChat = function() {
-        const box = document.getElementById('liveChatBox');
-        if (box) box.style.display = (box.style.display === 'flex') ? 'none' : 'flex';
-    };
-    window.sendLiveMessage = function(e) {
-        e.preventDefault();
-        const inp = document.getElementById('liveUserMessage');
-        if (inp && inp.value.trim()) inp.value = '';
-    };
+    /* ==========================================================================
+       10. INITIALIZE AOS ANIMATIONS
+       ========================================================================== */
+    if (typeof AOS !== 'undefined') {
+        AOS.init({ once: true, duration: 800 });
+    }
 
 })();
+
+// ==========================================================================
+// 11. BRANDED LIVE CHAT (SOCKET.IO TO BACKEND)
+// ==========================================================================
+const LIVE_BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : 'https://tamalhossain-backend.vercel.app';
+
+let visitorId = localStorage.getItem('portfolio_visitor_id');
+if (!visitorId) {
+    visitorId = Math.random().toString(36).substring(2, 7);
+    localStorage.setItem('portfolio_visitor_id', visitorId);
+}
+
+let liveSocket = null;
+if (typeof io !== 'undefined') {
+    liveSocket = io(LIVE_BACKEND_URL);
+
+    liveSocket.on('connect', () => {
+        console.log('Connected to live chat engine with Visitor ID:', visitorId);
+        liveSocket.emit('init_visitor', { visitorId });
+    });
+
+    liveSocket.on('admin_message', (data) => {
+        const chatBody = document.getElementById('liveChatBody');
+        if (chatBody) {
+            chatBody.innerHTML += `
+                <div class="chat-msg chat-incoming" style="animation: fadeIn 0.3s ease;">
+                    <p>${data.text}</p>
+                    <span class="chat-msg-time">${data.time}</span>
+                </div>
+            `;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        const chatBox = document.getElementById('liveChatBox');
+        if (chatBox && !chatBox.classList.contains('open')) {
+            chatBox.classList.add('open');
+            chatBox.style.display = 'flex';
+        }
+    });
+}
+
+window.toggleLiveChat = function() {
+    const chatBox = document.getElementById('liveChatBox');
+    if (!chatBox) return;
+
+    if (chatBox.classList.contains('open') || chatBox.style.display === 'flex') {
+        chatBox.classList.remove('open');
+        chatBox.style.display = 'none';
+    } else {
+        chatBox.classList.add('open');
+        chatBox.style.display = 'flex';
+        const input = document.getElementById('liveUserMessage');
+        if (input) setTimeout(() => input.focus(), 250);
+    }
+};
+
+window.sendLiveMessage = function(e) {
+    e.preventDefault();
+    const input = document.getElementById('liveUserMessage');
+    const msg = input ? input.value.trim() : '';
+    if (!msg) return;
+
+    const chatBody = document.getElementById('liveChatBody');
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    if (chatBody) {
+        chatBody.innerHTML += `
+            <div class="chat-msg chat-outgoing">
+                <p>${msg}</p>
+                <span class="chat-msg-time">${time}</span>
+            </div>
+        `;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    if (liveSocket && liveSocket.connected) {
+        liveSocket.emit('visitor_message', { visitorId, text: msg });
+    } else {
+        console.warn('Socket not connected to backend.');
+    }
+
+    if (input) input.value = '';
+};
+
+// ==========================================================================
+// 12. AUTO-POPUP FLOATING BADGE (Smooth Motion)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    function showFloatingBadge() {
+        const badge = document.getElementById('chatFloatingBadge');
+        const chatBox = document.getElementById('liveChatBox');
+
+        if (!badge || (chatBox && (chatBox.classList.contains('open') || chatBox.style.display === 'flex'))) {
+            return;
+        }
+
+        badge.classList.remove('hide');
+        badge.classList.add('show');
+
+        setTimeout(function() {
+            badge.classList.remove('show');
+            badge.classList.add('hide');
+        }, 5000);
+    }
+
+    setTimeout(function() {
+        showFloatingBadge();
+        setInterval(showFloatingBadge, 15000);
+    }, 2000);
+});
+
+
+/* ==========================================================================
+   3. BACKGROUND SPARKLING STARS ENGINE (60 FPS Smooth Cosmic Motion)
+   ========================================================================== */
+const canvas = document.getElementById('bgCanvas');
+if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const starCount = window.innerWidth < 768 ? 40 : 85;
+    let mouse = { x: null, y: null, radius: 120 };
+
+    window.addEventListener('mousemove', function(e) {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    });
+
+    window.addEventListener('mouseout', function() {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // তারা এবং স্পার্কল জেনারেটর
+    class SparklingStar {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 2 + 0.6; // তারার আকার
+            this.baseX = this.x;
+            this.baseY = this.y;
+            this.vx = (Math.random() - 0.5) * 0.35; // স্মুথ মোশন
+            this.vy = (Math.random() - 0.5) * 0.35;
+            this.sparkleSpeed = Math.random() * 0.03 + 0.01;
+            this.sparklePhase = Math.random() * Math.PI * 2;
+            this.isDiamond = Math.random() > 0.75; // ২৫% তারা ৪-পয়েন্ট স্পার্কল স্টার হবে
+        }
+
+        draw() {
+            this.sparklePhase += this.sparkleSpeed;
+            // সফট পালস ও উজ্জ্বলতা
+            const brightness = (Math.sin(this.sparklePhase) + 1) / 2;
+            const alpha = 0.2 + brightness * 0.7;
+
+            ctx.save();
+            ctx.translate(this.x, this.y);
+
+            if (this.isDiamond) {
+                // ৪-কোণা ডায়মন্ড স্পার্কল স্টার
+                ctx.fillStyle = `rgba(240, 187, 98, ${alpha})`;
+                ctx.shadowColor = '#f0bb62';
+                ctx.shadowBlur = 8 * brightness;
+
+                ctx.beginPath();
+                ctx.moveTo(0, -this.size * 2.8);
+                ctx.lineTo(this.size * 0.7, -this.size * 0.7);
+                ctx.lineTo(this.size * 2.8, 0);
+                ctx.lineTo(this.size * 0.7, this.size * 0.7);
+                ctx.lineTo(0, this.size * 2.8);
+                ctx.lineTo(-this.size * 0.7, this.size * 0.7);
+                ctx.lineTo(-this.size * 2.8, 0);
+                ctx.lineTo(-this.size * 0.7, -this.size * 0.7);
+                ctx.closePath();
+                ctx.fill();
+            } else {
+                // গ্লোয়িং রাউন্ড স্টার
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+                ctx.shadowColor = 'rgba(240, 187, 98, 0.8)';
+                ctx.shadowBlur = 6 * brightness;
+
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // স্ক্রিনের বাইরে গেলে অপর পাশে ফিরে আসা
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+
+            // মাউসের কাছাকাছি এলে সফট প্যারালাক্স বাবল এফেক্ট
+            if (mouse.x != null && mouse.y != null) {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < mouse.radius) {
+                    let force = (mouse.radius - distance) / mouse.radius;
+                    let directionX = (dx / distance) * force * 1.5;
+                    let directionY = (dy / distance) * force * 1.5;
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+
+            this.draw();
+        }
+    }
+
+    for (let i = 0; i < starCount; i++) {
+        stars.push(new SparklingStar());
+    }
+
+    function animateSparkles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // নক্ষত্র সংযোগের সূক্ষ্ম গোল্ডেন রেখা
+        for (let a = 0; a < stars.length; a++) {
+            for (let b = a + 1; b < stars.length; b++) {
+                let dist = Math.hypot(stars[a].x - stars[b].x, stars[a].y - stars[b].y);
+                if (dist < 95) {
+                    let lineAlpha = (1 - dist / 95) * 0.08;
+                    ctx.strokeStyle = `rgba(240, 187, 98, ${lineAlpha})`;
+                    ctx.lineWidth = 0.7;
+                    ctx.beginPath();
+                    ctx.moveTo(stars[a].x, stars[a].y);
+                    ctx.lineTo(stars[b].x, stars[b].y);
+                    ctx.stroke();
+                }
+            }
+        }
+
+        stars.forEach(star => star.update());
+        requestAnimationFrame(animateSparkles);
+    }
+    animateSparkles();
+}
