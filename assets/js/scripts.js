@@ -1,12 +1,12 @@
 /**
- * Md. Tamal Hossain Portfolio - Core Engine (Final Clean Setup)
- * Fast Preloader + Dynamic Backend Sync + Particle Canvas + Smooth Lightbox + Skills Counter + Live Chat
+ * Md. Tamal Hossain Portfolio - Core Engine (High-Performance Sync)
+ * Features: Zero-Lag Cache Hydration + Smart Preloader + Canvas Particles + Lightbox + Live Chat
  */
 
 (function() {
     'use strict';
 
-    // ১. ব্যাকএন্ড URL কনফিগারেশন (লোকালহোস্টে লোকাল সার্ভার, লাইভে Vercel স্বয়ংক্রিয়ভাবে পাবে)
+    // ১. ব্যাকএন্ড URL কনফিগারেশন
     const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000'
         : 'https://tamalhossain-backend.vercel.app';
@@ -24,18 +24,25 @@
     }
 
     /* ==========================================================================
-       1. FAST PRELOADER
+       1. SMART PRELOADER (ডাটা লোড হওয়া পর্যন্ত স্ক্রিন স্মুথ রাখবে)
        ========================================================================== */
+    let preloaderDismissed = false;
     function dismissPreloader() {
+        if (preloaderDismissed) return;
+        preloaderDismissed = true;
+
         const preloader = document.getElementById('preloader');
-        if (preloader && preloader.style.display !== 'none') {
+        if (preloader) {
+            preloader.style.transition = 'opacity 0.4s ease';
             preloader.style.opacity = '0';
-            setTimeout(() => { preloader.style.display = 'none'; }, 200);
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 400);
         }
     }
-    document.addEventListener('DOMContentLoaded', dismissPreloader);
-    window.addEventListener('load', dismissPreloader);
-    setTimeout(dismissPreloader, 400);
+
+    // ব্যাকএন্ড কানেকশন খুব ধীরগতির হলে সর্বোচ্চ ১২০০ms পর প্রিলোডার নিজে থেকেই সরে যাবে
+    const fallbackTimer = setTimeout(dismissPreloader, 1200);
 
     /* ==========================================================================
        2. STICKY NAVBAR
@@ -164,176 +171,200 @@
     };
 
     /* ==========================================================================
-       5. DYNAMIC BACKEND SYNC (Profile, Resume & Projects)
+       5. DYNAMIC DOM RENDERERS (DOM আপডেট লজিক)
+       ========================================================================== */
+    function applyProfileToDOM(prof) {
+        if (!prof) return;
+
+        if (prof.name) {
+            const sub = document.getElementById('dynSubtitle');
+            if (sub) sub.innerText = `- I Am ${prof.name}`;
+        }
+        if (prof.email) {
+            const em1 = document.getElementById('dynEmail');
+            const em2 = document.getElementById('dynContactEmail');
+            if (em1) em1.innerText = prof.email;
+            if (em2) em2.innerText = prof.email;
+        }
+        if (prof.phone) {
+            const ph1 = document.getElementById('dynPhone');
+            const ph2 = document.getElementById('dynContactPhone');
+            if (ph1) ph1.innerText = prof.phone;
+            if (ph2) ph2.innerText = prof.phone;
+        }
+        if (prof.address) {
+            const ad1 = document.getElementById('dynAddress');
+            const ad2 = document.getElementById('dynContactAddress');
+            if (ad1) ad1.innerText = prof.address;
+            if (ad2) ad2.innerText = prof.address;
+        }
+        if (prof.profileImage) {
+            const img = document.getElementById('dynProfileImg');
+            if (img) img.src = resolveImageUrl(prof.profileImage);
+        }
+        if (prof.aboutBio) {
+            const bio = document.getElementById('dynAboutBio');
+            if (bio) bio.innerHTML = `<p>${prof.aboutBio}</p>`;
+        }
+
+        if (prof.skills && prof.skills.length > 0) {
+            window.updateSkillsFromBackend(prof.skills);
+        }
+
+        if (prof.education && prof.education.length > 0) {
+            const eContainer = document.getElementById('dynEduContainer');
+            if (eContainer) {
+                eContainer.innerHTML = prof.education.map(e => `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-card-header">
+                                <h4 class="timeline-role">${e.degree || ''}</h4>
+                                <span class="timeline-badge">${e.year || ''}</span>
+                            </div>
+                            <h5 class="timeline-company"><i class="fa-solid fa-award me-2"></i>${e.institute || ''}</h5>
+                            <p class="timeline-desc">${e.field ? e.field + ' - ' : ''}Formal academic curriculum and practical training.</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        if (prof.experience && prof.experience.length > 0) {
+            const expContainer = document.getElementById('dynExpContainer');
+            if (expContainer) {
+                expContainer.innerHTML = prof.experience.map(x => `
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-card-header">
+                                <h4 class="timeline-role">${x.role || ''}</h4>
+                                <span class="timeline-badge">${x.duration || ''}</span>
+                            </div>
+                            <h5 class="timeline-company"><i class="fa-regular fa-building me-2"></i>${x.company || ''}</h5>
+                            <p class="timeline-desc">${x.description || ''}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    }
+
+    function applyProjectsToDOM(projects) {
+        if (!projects || projects.length === 0) return;
+        const grid = document.getElementById('dynPortfolioGrid');
+        if (!grid) return;
+
+        grid.innerHTML = projects.map(p => {
+            const isWeb = p.category === 'website' || p.category === 'wordpress';
+            const safeTitle = (p.title || '').replace(/'/g, "\\'");
+            const projectImg = resolveImageUrl(p.image);
+
+            if (isWeb) {
+                return `
+                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                        <div class="portfolio-card">
+                            <div class="browser-bar">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                                <span class="browser-title">${p.title}</span>
+                            </div>
+                            <div class="card-screen-scroll">
+                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
+                            </div>
+                            <div class="card-meta">
+                                <div class="meta-text">
+                                    <span class="meta-cat">${p.category}</span>
+                                    <h3 class="title">${p.title}</h3>
+                                    <p class="desc">${p.description || ''}</p>
+                                </div>
+                                <div class="meta-action">
+                                    ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview"><i class="fa fa-link"></i></a>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
+                        <div class="portfolio-card">
+                            <div class="browser-bar">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                                <span class="browser-title">${p.title}</span>
+                            </div>
+                            <div class="card-screen-graphic">
+                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
+                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                                </button>
+                            </div>
+                            <div class="card-meta">
+                                <div class="meta-text">
+                                    <span class="meta-cat">${p.category}</span>
+                                    <h3 class="title">${p.title}</h3>
+                                    <p class="desc">${p.description || ''}</p>
+                                </div>
+                                <div class="meta-action">
+                                    <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }).join('');
+    }
+
+    /* ==========================================================================
+       6. ZERO-LAG BACKEND SYNC (ক্যাশ ও লাইভ ডাটা ইন্টিগ্রেশন)
        ========================================================================== */
     async function syncPortfolioWithBackend() {
+        // ধাপ ১: ব্রাউজার ক্যাশে থাকা ডাটা দিয়ে পেজ ০ms-এ সাজিয়ে নেওয়া (কোনো ল্যাগ থাকবে না)
+        try {
+            const cachedProf = localStorage.getItem('portfolio_cached_profile');
+            if (cachedProf) applyProfileToDOM(JSON.parse(cachedProf));
+
+            const cachedProj = localStorage.getItem('portfolio_cached_projects');
+            if (cachedProj) applyProjectsToDOM(JSON.parse(cachedProj));
+        } catch (e) {
+            console.warn('Cache read error:', e);
+        }
+
+        // ধাপ ২: ব্যাকএন্ড থেকে নতুন ডাটা ফেচ করা
         try {
             const [profRes, projRes] = await Promise.all([
                 fetch(`${API_BASE}/profile`).catch(() => null),
                 fetch(`${API_BASE}/projects`).catch(() => null)
             ]);
 
-            // PROFILE & RESUME TIMELINE
             if (profRes && profRes.ok) {
-                const prof = await profRes.json();
-                
-                if (prof.name) {
-                    const sub = document.getElementById('dynSubtitle');
-                    if (sub) sub.innerText = `- I Am ${prof.name}`;
-                }
-                if (prof.email) {
-                    const em1 = document.getElementById('dynEmail');
-                    const em2 = document.getElementById('dynContactEmail');
-                    if (em1) em1.innerText = prof.email;
-                    if (em2) em2.innerText = prof.email;
-                }
-                if (prof.phone) {
-                    const ph1 = document.getElementById('dynPhone');
-                    const ph2 = document.getElementById('dynContactPhone');
-                    if (ph1) ph1.innerText = prof.phone;
-                    if (ph2) ph2.innerText = prof.phone;
-                }
-                if (prof.address) {
-                    const ad1 = document.getElementById('dynAddress');
-                    const ad2 = document.getElementById('dynContactAddress');
-                    if (ad1) ad1.innerText = prof.address;
-                    if (ad2) ad2.innerText = prof.address;
-                }
-                if (prof.profileImage) {
-                    const img = document.getElementById('dynProfileImg');
-                    if (img) img.src = resolveImageUrl(prof.profileImage);
-                }
-                if (prof.aboutBio) {
-                    const bio = document.getElementById('dynAboutBio');
-                    if (bio) bio.innerHTML = `<p>${prof.aboutBio}</p>`;
-                }
-
-                // Skills Rendering
-                if (prof.skills && prof.skills.length > 0) {
-                    window.updateSkillsFromBackend(prof.skills);
-                }
-
-                // Education Timeline
-                if (prof.education && prof.education.length > 0) {
-                    const eContainer = document.getElementById('dynEduContainer');
-                    if (eContainer) {
-                        eContainer.innerHTML = prof.education.map(e => `
-                            <div class="timeline-item">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-card">
-                                    <div class="timeline-card-header">
-                                        <h4 class="timeline-role">${e.degree || ''}</h4>
-                                        <span class="timeline-badge">${e.year || ''}</span>
-                                    </div>
-                                    <h5 class="timeline-company"><i class="fa-solid fa-award me-2"></i>${e.institute || ''}</h5>
-                                    <p class="timeline-desc">${e.field ? e.field + ' - ' : ''}Formal academic curriculum and practical training.</p>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                }
-
-                // Experience Timeline
-                if (prof.experience && prof.experience.length > 0) {
-                    const expContainer = document.getElementById('dynExpContainer');
-                    if (expContainer) {
-                        expContainer.innerHTML = prof.experience.map(x => `
-                            <div class="timeline-item">
-                                <div class="timeline-dot"></div>
-                                <div class="timeline-card">
-                                    <div class="timeline-card-header">
-                                        <h4 class="timeline-role">${x.role || ''}</h4>
-                                        <span class="timeline-badge">${x.duration || ''}</span>
-                                    </div>
-                                    <h5 class="timeline-company"><i class="fa-regular fa-building me-2"></i>${x.company || ''}</h5>
-                                    <p class="timeline-desc">${x.description || ''}</p>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                }
+                const freshProfile = await profRes.json();
+                applyProfileToDOM(freshProfile);
+                localStorage.setItem('portfolio_cached_profile', JSON.stringify(freshProfile));
             }
 
-            // PROJECTS HYDRATION
             if (projRes && projRes.ok) {
-                const projects = await projRes.json();
-                if (projects && projects.length > 0) {
-                    const grid = document.getElementById('dynPortfolioGrid');
-                    if (grid) {
-                        grid.innerHTML = projects.map(p => {
-                            const isWeb = p.category === 'website' || p.category === 'wordpress';
-                            const safeTitle = (p.title || '').replace(/'/g, "\\'");
-                            const projectImg = resolveImageUrl(p.image);
-
-                            if (isWeb) {
-                                return `
-                                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
-                                        <div class="portfolio-card">
-                                            <div class="browser-bar">
-                                                <span class="dot dot-red"></span>
-                                                <span class="dot dot-yellow"></span>
-                                                <span class="dot dot-green"></span>
-                                                <span class="browser-title">${p.title}</span>
-                                            </div>
-                                            <div class="card-screen-scroll">
-                                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
-                                            </div>
-                                            <div class="card-meta">
-                                                <div class="meta-text">
-                                                    <span class="meta-cat">${p.category}</span>
-                                                    <h3 class="title">${p.title}</h3>
-                                                    <p class="desc">${p.description || ''}</p>
-                                                </div>
-                                                <div class="meta-action">
-                                                    ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview"><i class="fa fa-link"></i></a>` : ''}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            } else {
-                                return `
-                                    <div class="col-lg-4 col-md-6 col-12 mix ${p.category} mb-4">
-                                        <div class="portfolio-card">
-                                            <div class="browser-bar">
-                                                <span class="dot dot-red"></span>
-                                                <span class="dot dot-yellow"></span>
-                                                <span class="dot dot-green"></span>
-                                                <span class="browser-title">${p.title}</span>
-                                            </div>
-                                            <div class="card-screen-graphic">
-                                                <img src="${projectImg}" alt="${p.title}" loading="lazy">
-                                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
-                                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                                </button>
-                                            </div>
-                                            <div class="card-meta">
-                                                <div class="meta-text">
-                                                    <span class="meta-cat">${p.category}</span>
-                                                    <h3 class="title">${p.title}</h3>
-                                                    <p class="desc">${p.description || ''}</p>
-                                                </div>
-                                                <div class="meta-action">
-                                                    <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
-                                                        <i class="fa-solid fa-eye"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                        }).join('');
-                    }
-                }
+                const freshProjects = await projRes.json();
+                applyProjectsToDOM(freshProjects);
+                localStorage.setItem('portfolio_cached_projects', JSON.stringify(freshProjects));
             }
         } catch (err) {
-            console.log('Running on fallback offline content:', err);
+            console.log('Running on cached/offline content:', err);
+        } finally {
+            // ডাটা সম্পূর্ণ আসার পর প্রিলোডার মসৃণভাবে সরিয়ে নেওয়া হবে
+            clearTimeout(fallbackTimer);
+            dismissPreloader();
         }
     }
 
     /* ==========================================================================
-       6. PORTFOLIO FILTERING
+       7. PORTFOLIO FILTERING
        ========================================================================== */
     document.addEventListener('DOMContentLoaded', function() {
         syncPortfolioWithBackend();
@@ -360,7 +391,7 @@
     });
 
     /* ==========================================================================
-       7. LIGHTBOX CONTROLS
+       8. LIGHTBOX CONTROLS
        ========================================================================== */
     window.openLightbox = function(imageSrc, title) {
         const modal = document.getElementById('imageLightbox');
@@ -398,7 +429,7 @@
     });
 
     /* ==========================================================================
-       8. CONTACT FORM SUBMISSION (Web3Forms)
+       9. CONTACT FORM SUBMISSION (Web3Forms)
        ========================================================================== */
     const form = document.getElementById('contactForm');
     const popup = document.getElementById('thankYouPopup');
@@ -436,7 +467,7 @@
     };
 
     /* ==========================================================================
-       9. INITIALIZE AOS ANIMATIONS
+       10. INITIALIZE AOS ANIMATIONS
        ========================================================================== */
     if (typeof AOS !== 'undefined') {
         AOS.init({ once: true, duration: 800 });
@@ -445,7 +476,7 @@
 })();
 
 // ==========================================================================
-// BRANDED LIVE CHAT (SOCKET.IO TO BACKEND)
+// 11. BRANDED LIVE CHAT (SOCKET.IO TO BACKEND)
 // ==========================================================================
 const LIVE_BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:5000'
@@ -530,7 +561,7 @@ window.sendLiveMessage = function(e) {
 };
 
 // ==========================================================================
-// AUTO-POPUP FLOATING BADGE (Smooth Spring Motion Trigger)
+// 12. AUTO-POPUP FLOATING BADGE (Smooth Motion)
 // ==========================================================================
 document.addEventListener('DOMContentLoaded', function() {
     function showFloatingBadge() {
