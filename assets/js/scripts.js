@@ -291,13 +291,29 @@
       aBio.innerHTML = paras.map((p) => `<p>${p}</p>`).join("");
     }
 
-    if (prof.resumeFile && prof.resumeFile !== "#") {
-      const resBtn = document.getElementById("dynResumeBtn");
-      if (resBtn) {
-        resBtn.href = resolveImageUrl(prof.resumeFile);
-        resBtn.style.display = "inline-flex";
-      }
-    }
+    if (prof.resumeFile && prof.resumeFile !== '#') {
+            const resBtn = document.getElementById('dynResumeBtn');
+            if (resBtn) {
+                // ব্রাউজার সিকিউরিটি বাইপাস করে সরাসরি ডাউনলোড করার ট্রিক
+                if (prof.resumeFile.startsWith('data:')) {
+                    resBtn.href = "javascript:void(0)";
+                    resBtn.onclick = function(e) {
+                        e.preventDefault();
+                        const link = document.createElement('a');
+                        link.href = prof.resumeFile;
+                        link.download = 'Md_Tamal_Hossain_Resume.pdf'; // ডাউনলোডের পর ফাইলের নাম এটি হবে
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    };
+                } else {
+                    resBtn.href = resolveImageUrl(prof.resumeFile);
+                    resBtn.target = "_blank";
+                }
+                resBtn.style.display = 'inline-flex';
+            }
+        }
+        
 
     // ৪. স্কিলস
     const skillsData =
