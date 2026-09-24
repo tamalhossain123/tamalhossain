@@ -736,3 +736,22 @@ if (canvas) {
   }
   animateSparkles();
 }
+
+
+
+
+// ==========================================
+// 9. INITIALIZE AOS ANIMATION (CRITICAL FIX)
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        if (typeof AOS !== 'undefined') {
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 50
+            });
+            AOS.refresh();
+        }
+    }, 500); // ডাটা রেন্ডার হওয়ার জন্য হাফ সেকেন্ড সময় দেওয়া হলো
+});
