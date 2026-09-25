@@ -33,7 +33,7 @@ body {
     background-image: url("https://solarscroller.rhettforbes.com/img/stars.jpg");
     background-repeat: repeat;
     background-attachment: fixed;
-    animation: sky 10s linear infinite;
+    animation: sky 30s linear infinite;
     overflow-x: hidden;
     position: relative;
     width: 100%;
@@ -810,7 +810,6 @@ ul, li { list-style: none; }
     border-color: var(--primary);
 }
 
-/* ১. UNIFIED PORTFOLIO CARD (সব কার্ডের সমান উচ্চতা ও লুক) */
 .portfolio-card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
@@ -829,7 +828,6 @@ ul, li { list-style: none; }
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
-/* Browser Header Bar */
 .browser-bar {
     height: 34px;
     background: #181d20;
@@ -859,7 +857,6 @@ ul, li { list-style: none; }
     text-overflow: ellipsis;
 }
 
-/* ২. WEBSITE VIEWPORT: মাউস দিয়ে স্ক্রলযোগ্য স্লিম স্ক্রলবার */
 .card-screen-scroll {
     height: 270px;
     overflow-y: auto;
@@ -869,7 +866,6 @@ ul, li { list-style: none; }
     background: #15181a;
 }
 
-/* কাস্টম স্লিম স্ক্রলবার */
 .card-screen-scroll::-webkit-scrollbar {
     width: 5px;
 }
@@ -891,7 +887,6 @@ ul, li { list-style: none; }
     height: auto;
 }
 
-/* ৩. GRAPHIC VIEWPORT: ফিক্সড উচ্চতা ও জুম অপশন */
 .card-screen-graphic {
     height: 270px;
     position: relative;
@@ -932,7 +927,6 @@ ul, li { list-style: none; }
     opacity: 1;
 }
 
-/* কার্ডের নিচের মেটা ডাটা (সব কার্ডের একই উচ্চতা ও স্পেসিং) */
 .card-meta {
     padding: 18px 20px;
     display: flex;
@@ -1013,9 +1007,6 @@ ul, li { list-style: none; }
     box-shadow: 0 10px 25px rgba(240, 187, 98, 0.3);
 }
 
-/* ==========================================================================
-   ৪. SMOOTH LIGHTBOX MODAL WITH CLOSE BUTTON
-   ========================================================================== */
 .lightbox-modal {
     display: none;
     position: fixed;
@@ -1036,7 +1027,6 @@ ul, li { list-style: none; }
     opacity: 1;
 }
 
-/* Top Right Cross Close Button */
 .lightbox-close-btn {
     position: absolute;
     top: 25px;
@@ -1117,7 +1107,6 @@ ul, li { list-style: none; }
     z-index: 1;
 }
 
-/* Column Header (Icon + Title) */
 .timeline-column-header {
     display: flex;
     align-items: center;
@@ -1147,14 +1136,12 @@ ul, li { list-style: none; }
     font-family: var(--font-heading);
 }
 
-/* Vertical Track Container */
 .timeline-track {
     position: relative;
     padding-left: 28px;
     border-left: 2px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Individual Timeline Item */
 .timeline-item {
     position: relative;
     margin-bottom: 26px;
@@ -1164,11 +1151,10 @@ ul, li { list-style: none; }
     margin-bottom: 0;
 }
 
-/* Glowing Timeline Dot */
 .timeline-dot {
     position: absolute;
     top: 24px;
-    left: -35px; /* লাইন বরাবর সেন্টারিং */
+    left: -35px;
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -1178,7 +1164,6 @@ ul, li { list-style: none; }
     transition: all 0.35s ease;
 }
 
-/* Timeline Card */
 .timeline-card {
     background: rgba(255, 255, 255, 0.025);
     border: 1px solid var(--border-color);
@@ -1190,7 +1175,6 @@ ul, li { list-style: none; }
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
-/* Hover Animation */
 .timeline-item:hover .timeline-card {
     transform: translateX(8px);
     background: rgba(255, 255, 255, 0.045);
@@ -1203,7 +1187,6 @@ ul, li { list-style: none; }
     box-shadow: 0 0 0 6px rgba(240, 187, 98, 0.28), 0 0 16px var(--primary);
 }
 
-/* Card Header: Role & Duration Badge */
 .timeline-card-header {
     display: flex;
     justify-content: space-between;
@@ -1233,7 +1216,6 @@ ul, li { list-style: none; }
     white-space: nowrap;
 }
 
-/* Company / Institution */
 .timeline-company {
     font-size: 15px;
     font-weight: 600;
@@ -1248,14 +1230,12 @@ ul, li { list-style: none; }
     font-size: 14px;
 }
 
-/* Description */
 .timeline-desc {
     font-size: 14px;
     line-height: 1.75;
     color: var(--text-muted);
 }
 
-/* Responsive */
 @media (max-width: 767px) {
     .timeline-track {
         padding-left: 20px;
@@ -1280,7 +1260,6 @@ ul, li { list-style: none; }
     padding-bottom: 140px;
 }
 
-/* Titles */
 .contact-section-title {
     font-size: 34px;
     font-weight: 700;
@@ -1297,7 +1276,6 @@ ul, li { list-style: none; }
     margin-bottom: 30px;
 }
 
-/* 1. MODERN INPUT FIELDS */
 .contact-modern-form {
     display: flex;
     flex-direction: column;
@@ -1333,7 +1311,6 @@ ul, li { list-style: none; }
     resize: vertical;
 }
 
-/* 2. CONTACT DETAILS LIST (Right Side) */
 .contact-details-list {
     display: flex;
     flex-direction: column;
@@ -1352,7 +1329,6 @@ ul, li { list-style: none; }
     transform: translateX(4px);
 }
 
-/* Circular Icon */
 .contact-info-icon {
     width: 48px;
     height: 48px;
@@ -1390,7 +1366,6 @@ ul, li { list-style: none; }
     line-height: 1.6;
 }
 
-/* 3. SOCIAL DOCK SECTION (Under Info) */
 .contact-social-section {
     padding-top: 15px;
 }
@@ -1408,7 +1383,6 @@ ul, li { list-style: none; }
     justify-content: flex-start;
 }
 
-/* Responsive */
 @media (max-width: 991px) {
     .contact_us {
         padding-bottom: 80px;
@@ -1450,7 +1424,6 @@ ul, li { list-style: none; }
     padding: 20px !important;
 }
 
-/* Modal Content Card */
 .popup-content {
     background: var(--bg-card, #252b2f) !important;
     border: 1px solid rgba(240, 187, 98, 0.35) !important;
@@ -1465,7 +1438,6 @@ ul, li { list-style: none; }
     position: relative !important;
 }
 
-/* Checkmark Circle Icon */
 .popup-check-icon {
     width: 68px;
     height: 68px;
@@ -1497,7 +1469,6 @@ ul, li { list-style: none; }
     font-family: var(--font-body);
 }
 
-/* Styled Close / OK Button */
 .popup-close-btn {
     background: var(--primary, #f0bb62) !important;
     color: #121619 !important;
@@ -1543,7 +1514,6 @@ ul, li { list-style: none; }
 /* END: Footer */
 
 /* START: Responsive styles */
-/* Tablet (max-width: 991px) */
 @media (max-width: 991px) {
     :root {
         --section-padding: 75px 0;
@@ -1601,7 +1571,6 @@ ul, li { list-style: none; }
     }
 }
 
-/* Mobile Devices (max-width: 767px) */
 @media (max-width: 767px) {
     :root {
         --section-padding: 60px 0;
@@ -1718,7 +1687,6 @@ ul, li { list-style: none; }
     }
 }
 
-/* Extra Small Mobile (max-width: 480px) */
 @media (max-width: 480px) {
     .hero-name {
         font-size: 32px;

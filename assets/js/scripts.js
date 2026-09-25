@@ -1,13 +1,9 @@
-/**
- * Md. Tamal Hossain Portfolio - Core Engine (100% Dynamic Backend Sync)
- */
 (function () {
   "use strict";
 
   const BACKEND_URL = "https://tamalhossain-backend.vercel.app"; // শেষে কোনো স্লাশ (/) বা admin দেওয়া যাবে না
   const API_BASE = `${BACKEND_URL}/api`;
 
-  // ডিফল্ট ব্যাকআপ ডাটা (ডাটাবেজ লোড হতে দেরি হলে বা খালি থাকলেও সাইট কখনো ফাঁকা থাকবে না)
   const DEFAULT_PROFILE = {
     name: "Md. Tamal Hossain",
     badgeText: "- I AM MD. TAMAL HOSSAIN",
@@ -86,7 +82,7 @@
     return `${BACKEND_URL}${imgUrl.startsWith("/") ? "" : "/"}${imgUrl}`;
   }
 
-  /* 1. SMART PRELOADER */
+  /* START: Preloader */
   let preloaderDismissed = false;
   function dismissPreloader() {
     if (preloaderDismissed) return;
@@ -101,14 +97,16 @@
     }
   }
   const fallbackTimer = setTimeout(dismissPreloader, 1500);
+  /* END: Preloader */
 
-  /* 2. STICKY NAVBAR */
+  /* START: Sticky navbar */
   window.addEventListener("scroll", function () {
     const navbar = document.getElementById("navbar");
     if (navbar) navbar.classList.toggle("nav-sticky", window.scrollY >= 50);
   });
+  /* END: Sticky navbar */
 
-  /* 3. DYNAMIC TYPEWRITER ENGINE */
+  /* START: Typewriter */
   let typewriterTimeout = null;
   function runTypewriter(titles) {
     let wrap = document.querySelector("#typewriteHeading .wrap");
@@ -154,8 +152,9 @@
     }
     tick();
   }
+  /* END: Typewriter */
 
-  /* 4. SKILLS ANIMATION */
+  /* START: Skills animation */
   window.triggerSkillsAnimation = function () {
     const skillsSection = document.getElementById("skills");
     if (!skillsSection) return;
@@ -179,14 +178,12 @@
 
     observer.observe(skillsSection);
   };
+  /* END: Skills animation */
 
-  /* ==========================================================================
-       5. MASTER DYNAMIC DOM RENDERER
-       ========================================================================== */
+  /* START: Profile renderer */
   function applyProfileToDOM(prof) {
     if (!prof) return;
 
-    // ১. ব্র্যান্ডিং ও ফেভিকন
     if (prof.siteLogo) {
       const navLogo = document.getElementById("dynNavLogo");
       if (navLogo) navLogo.src = resolveImageUrl(prof.siteLogo);
@@ -196,7 +193,6 @@
       if (fav) fav.href = resolveImageUrl(prof.siteFavicon);
     }
 
-    // ২. হিরো সেকশন
     const sub = document.getElementById("dynSubtitle");
     if (sub) sub.innerText = prof.badgeText || DEFAULT_PROFILE.badgeText;
 
@@ -215,7 +211,6 @@
     const b2 = document.getElementById("dynBtnPortfolio");
     if (b2) b2.href = prof.btnPortfolioLink || "#portfolio";
 
-    // টাইপরাইটার
     const titlesStr = prof.typingTitles || DEFAULT_PROFILE.typingTitles;
     if (titlesStr) {
       const titlesArr = titlesStr
@@ -225,7 +220,6 @@
       runTypewriter(titlesArr);
     }
 
-    // সোশ্যাল লিংকস
     const socials =
       prof.socialLinks && prof.socialLinks.length > 0
         ? prof.socialLinks
@@ -263,7 +257,6 @@
     if (hDock) hDock.innerHTML = socialHtml;
     if (cDock) cDock.innerHTML = socialHtml;
 
-    // ৩. ছবি ও বায়ো
     const pImg = document.getElementById("dynProfileImg");
     if (pImg)
       pImg.src = resolveImageUrl(
@@ -291,31 +284,28 @@
       aBio.innerHTML = paras.map((p) => `<p>${p}</p>`).join("");
     }
 
-    if (prof.resumeFile && prof.resumeFile !== '#') {
-            const resBtn = document.getElementById('dynResumeBtn');
-            if (resBtn) {
-                // ব্রাউজার সিকিউরিটি বাইপাস করে সরাসরি ডাউনলোড করার ট্রিক
-                if (prof.resumeFile.startsWith('data:')) {
-                    resBtn.href = "javascript:void(0)";
-                    resBtn.onclick = function(e) {
-                        e.preventDefault();
-                        const link = document.createElement('a');
-                        link.href = prof.resumeFile;
-                        link.download = 'Md_Tamal_Hossain_Resume.pdf'; // ডাউনলোডের পর ফাইলের নাম এটি হবে
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    };
-                } else {
-                    resBtn.href = resolveImageUrl(prof.resumeFile);
-                    resBtn.target = "_blank";
-                }
-                resBtn.style.display = 'inline-flex';
-            }
+    if (prof.resumeFile && prof.resumeFile !== "#") {
+      const resBtn = document.getElementById("dynResumeBtn");
+      if (resBtn) {
+        if (prof.resumeFile.startsWith("data:")) {
+          resBtn.href = "javascript:void(0)";
+          resBtn.onclick = function (e) {
+            e.preventDefault();
+            const link = document.createElement("a");
+            link.href = prof.resumeFile;
+            link.download = "Md_Tamal_Hossain_Resume.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          };
+        } else {
+          resBtn.href = resolveImageUrl(prof.resumeFile);
+          resBtn.target = "_blank";
         }
-        
+        resBtn.style.display = "inline-flex";
+      }
+    }
 
-    // ৪. স্কিলস
     const skillsData =
       prof.skills && prof.skills.length > 0
         ? prof.skills
@@ -340,7 +330,6 @@
       window.triggerSkillsAnimation();
     }
 
-    // ৫. সার্ভিসেস
     const servicesData =
       prof.services && prof.services.length > 0
         ? prof.services
@@ -362,7 +351,6 @@
         .join("");
     }
 
-    // ৬. ফানফ্যাক্টস
     const funData =
       prof.funfacts && prof.funfacts.length > 0
         ? prof.funfacts
@@ -383,7 +371,6 @@
         .join("");
     }
 
-    // ৭. টেকনোলজি
     if (prof.technologies && prof.technologies.length > 0) {
       const techContainer = document.getElementById("dynTechGrid");
       if (techContainer) {
@@ -399,7 +386,6 @@
       }
     }
 
-    // ৮. এডুকেশন ও এক্সপেরিয়েন্স
     if (prof.education && prof.education.length > 0) {
       const eduContainer = document.getElementById("dynEduContainer");
       if (eduContainer) {
@@ -445,7 +431,6 @@
       }
     }
 
-    // ৯. কনট্যাক্ট ইনফো
     const em = document.getElementById("dynContactEmail");
     if (em) em.innerText = prof.email || DEFAULT_PROFILE.email;
 
@@ -456,9 +441,9 @@
     if (ad) ad.innerText = prof.address || DEFAULT_PROFILE.address;
   }
 
-  /* ==========================================================================
-       6. PORTFOLIO PROJECTS RENDERER
-       ========================================================================== */
+  /* END: Profile renderer */
+
+  /* START: Portfolio renderer */
   function applyProjectsToDOM(projects) {
     const grid = document.getElementById("dynPortfolioGrid");
     if (!grid || !projects || projects.length === 0) return;
@@ -523,11 +508,10 @@
       .join("");
   }
 
-  /* ==========================================================================
-       7. ZERO-LAG BACKEND SYNC (BULLETPROOF EXECUTION)
-       ========================================================================== */
+  /* END: Portfolio renderer */
+
+  /* START: Backend sync */
   async function syncPortfolioWithBackend() {
-    // ধাপ ১: ডিফল্ট বা ক্যাশ থেকে সাথে সাথে স্ক্রিন লোড করা (যাতে কখনো ব্ল্যাঙ্ক না থাকে)
     try {
       const cachedProf = localStorage.getItem("portfolio_cached_profile");
       applyProfileToDOM(cachedProf ? JSON.parse(cachedProf) : DEFAULT_PROFILE);
@@ -538,7 +522,6 @@
       applyProfileToDOM(DEFAULT_PROFILE);
     }
 
-    // ধাপ ২: ব্যাকএন্ড থেকে তাজা ডেটা ফেচ
     try {
       const [profRes, projRes] = await Promise.all([
         fetch(`${API_BASE}/profile`).catch(() => null),
@@ -574,16 +557,14 @@
     }
   }
 
-  // স্ক্রিপ্ট যখনই রান হোক, সাথে সাথে এক্সিকিউট করবে (ইভেন্ট মিস হবে না)
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", syncPortfolioWithBackend);
   } else {
     syncPortfolioWithBackend();
   }
+  /* END: Backend sync */
 
-  /* ==========================================================================
-       8. LIGHTBOX, CONTACT & LIVE CHAT
-       ========================================================================== */
+  /* START: Lightbox, contact form, and live chat */
   window.openLightbox = function (imageSrc, title) {
     const modal = document.getElementById("imageLightbox");
     const img = document.getElementById("lightboxImg");
@@ -610,7 +591,6 @@
     if (e.key === "Escape") window.closeLightbox();
   });
 
-  // Contact Form
   const form = document.getElementById("contactForm");
   const popup = document.getElementById("thankYouPopup");
   const submitBtn = document.getElementById("submitBtn");
@@ -676,8 +656,10 @@
     }
     if (input) input.value = "";
   };
+  /* END: Lightbox, contact form, and live chat */
 })();
 
+/* START: Background sparkles */
 const canvas = document.getElementById("bgCanvas");
 if (canvas) {
   const ctx = canvas.getContext("2d");
@@ -696,11 +678,10 @@ if (canvas) {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 2 + 0.6;
-      
-      // স্পিড বাড়ানোর জন্য 0.35 থেকে পরিবর্তন করে 1.2 করা হয়েছে
-      this.vx = (Math.random() - 0.5) * 1.2; 
+
+      this.vx = (Math.random() - 0.5) * 1.2;
       this.vy = (Math.random() - 0.5) * 1.2;
-      
+
       this.sparklePhase = Math.random() * Math.PI * 2;
       this.isDiamond = Math.random() > 0.75;
     }
@@ -752,22 +733,19 @@ if (canvas) {
   }
   animateSparkles();
 }
+/* END: Background sparkles */
 
-
-
-
-// ==========================================
-// 9. INITIALIZE AOS ANIMATION (CRITICAL FIX)
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        if (typeof AOS !== 'undefined') {
-            AOS.init({
-                duration: 1000,
-                once: true,
-                offset: 50
-            });
-            AOS.refresh();
-        }
-    }, 500); // ডাটা রেন্ডার হওয়ার জন্য হাফ সেকেন্ড সময় দেওয়া হলো
+/* START: AOS initialization */
+document.addEventListener("DOMContentLoaded", function () {
+  setTimeout(() => {
+    if (typeof AOS !== "undefined") {
+      AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 50,
+      });
+      AOS.refresh();
+    }
+  }, 500);
 });
+/* END: AOS initialization */
