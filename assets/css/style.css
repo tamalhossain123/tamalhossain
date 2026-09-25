@@ -1,6 +1,4 @@
-/* ==========================================================================
-   === START GLOBAL DESIGN TOKENS & BASE STYLES ===
-   ========================================================================== */
+/* START: Global styles */
 :root {
     --primary: #f0bb62;
     --primary-hover: #e0aa50;
@@ -35,7 +33,7 @@ body {
     background-image: url("https://solarscroller.rhettforbes.com/img/stars.jpg");
     background-repeat: repeat;
     background-attachment: fixed;
-    animation: sky 82s linear infinite;
+    animation: sky 10s linear infinite;
     overflow-x: hidden;
     position: relative;
     width: 100%;
@@ -109,12 +107,9 @@ ul, li { list-style: none; }
     max-width: 650px;
     margin: 0 auto;
 }
-/* === END GLOBAL DESIGN TOKENS & BASE STYLES === */
+/* END: Global styles */
 
-
-/* ==========================================================================
-   === START PRELOADER ===
-   ========================================================================== */
+/* START: Preloader */
 .preloader {
     background: var(--bg-dark);
     position: fixed;
@@ -150,12 +145,9 @@ ul, li { list-style: none; }
     0%, 100% { transform: scale(0); }
     50% { transform: scale(1.0); }
 }
-/* === END PRELOADER === */
+/* END: Preloader */
 
-
-/* ==========================================================================
-   === START BACKGROUND CANVAS ===
-   ========================================================================== */
+/* START: Background canvas */
 #bgCanvas {
     position: fixed;
     top: 0;
@@ -165,12 +157,9 @@ ul, li { list-style: none; }
     z-index: 0;
     pointer-events: none;
 }
-/* === END BACKGROUND CANVAS === */
+/* END: Background canvas */
 
-
-/* ==========================================================================
-   === START NAVBAR ===
-   ========================================================================== */
+/* START: Navbar */
 .navbar-brand img { 
     width: 140px; 
     height: auto; 
@@ -223,19 +212,16 @@ ul, li { list-style: none; }
 .navbar-custom .navbar-nav li a.active { 
     color: var(--primary) !important; 
 }
-/* === END NAVBAR === */
+/* END: Navbar */
 
-
-/* ==========================================================================
-   === START HERO SECTION & BUTTONS & SOCIAL DOCK ===
-   ========================================================================== */
+/* START: Hero section */
 .hero-section {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 140px 0;
+    padding: 140px 0 100px;
     overflow: hidden;
 }
 
@@ -465,12 +451,9 @@ ul, li { list-style: none; }
     opacity: 1;
     margin-left: 9px;
 }
-/* === END HERO SECTION & BUTTONS & SOCIAL DOCK === */
+/* END: Hero section */
 
-
-/* ==========================================================================
-   === START ABOUT SECTION ===
-   ========================================================================== */
+/* START: About section */
 .about_area {
     position: relative;
     background: transparent;
@@ -545,12 +528,9 @@ ul, li { list-style: none; }
 .about-bio-content p:last-child {
     margin-bottom: 0;
 }
-/* === END ABOUT SECTION === */
+/* END: About section */
 
-
-/* ==========================================================================
-   === START SKILLS SECTION ===
-   ========================================================================== */
+/* START: Skills section */
 .skills_area {
     position: relative;
     background: transparent;
@@ -667,12 +647,9 @@ ul, li { list-style: none; }
 .skill-item:hover .skill-progress-fill {
     box-shadow: 0 0 18px rgba(240, 187, 98, 0.8);
 }
-/* === END SKILLS SECTION === */
+/* END: Skills section */
 
-
-/* ==========================================================================
-   === START SERVICES SECTION ===
-   ========================================================================== */
+/* START: Services section */
 .service_area {
     padding-bottom: 190px; 
 }
@@ -705,12 +682,9 @@ ul, li { list-style: none; }
     font-size: 20px; 
     margin-bottom: 12px; 
 }
-/* === END SERVICES SECTION === */
+/* END: Services section */
 
-
-/* ==========================================================================
-   === START FUNFACTS / COUNTERS SECTION ===
-   ========================================================================== */
+/* START: Fun facts section */
 .funfact_area {
     background-size: cover;
     background-position: center;
@@ -769,12 +743,9 @@ ul, li { list-style: none; }
     font-weight: 500; 
     color: #ffffff; 
 }
-/* === END FUNFACTS / COUNTERS SECTION === */
+/* END: Fun facts section */
 
-
-/* ==========================================================================
-   === START TECHNOLOGIES SECTION ===
-   ========================================================================== */
+/* START: Technologies section */
 .technologies-part {
     padding-top: 190px;    
 }
@@ -805,12 +776,9 @@ ul, li { list-style: none; }
     border-color: var(--primary);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
-/* === END TECHNOLOGIES SECTION === */
+/* END: Technologies section */
 
-
-/* ==========================================================================
-   === START PORTFOLIO SECTION (UNIFIED CARDS, SCROLLBAR & LIGHTBOX) ===
-   ========================================================================== */
+/* START: Portfolio section */
 .portfolio_area {
     padding-bottom: 50px;
 }
@@ -1140,11 +1108,9 @@ ul, li { list-style: none; }
         height: 240px;
     }
 }
-/* === END PORTFOLIO SECTION === */
+/* END: Portfolio section */
 
-/* ==========================================================================
-   === START RESUME TIMELINE SECTION (Modern Interactive Timeline) ===
-   ========================================================================== */
+/* START: Resume section */
 .resume_area {
     position: relative;
     background: transparent;
@@ -1304,12 +1270,9 @@ ul, li { list-style: none; }
         font-size: 17px;
     }
 }
-/* === END RESUME TIMELINE SECTION === */
+/* END: Resume section */
 
-
-/* ==========================================================================
-   === START CONTACT FORM & INFO SECTION (Exact Match with Image) ===
-   ========================================================================== */
+/* START: Contact section */
 .contact_us {
     position: relative;
     background: transparent;
@@ -1466,12 +1429,9 @@ ul, li { list-style: none; }
         text-align: center;
     }
 }
-/* === END CONTACT FORM & INFO SECTION === */
+/* END: Contact section */
 
-
-/* ==========================================================================
-   THANK YOU POPUP MODAL (Fixed Screen Overlay & Smooth Pop Animation)
-   ========================================================================== */
+/* START: Thank-you popup */
 .popup-overlay {
     display: none;
     position: fixed !important;
@@ -1569,11 +1529,9 @@ ul, li { list-style: none; }
         opacity: 1; 
     }
 }
+/* END: Thank-you popup */
 
-
-/* ==========================================================================
-   === START FOOTER ===
-   ========================================================================== */
+/* START: Footer */
 .footer {
     padding: 10px 0;
     border-top: 1px solid var(--border-color);
@@ -1582,13 +1540,9 @@ ul, li { list-style: none; }
 }
 
 .copyright { font-size: 14px; color: var(--text-muted); }
-/* === END FOOTER === */
+/* END: Footer */
 
-
-/* ==========================================================================
-   === START RESPONSIVE MEDIA QUERIES (TABLET & MOBILE) ===
-   ========================================================================== */
-
+/* START: Responsive styles */
 /* Tablet (max-width: 991px) */
 @media (max-width: 991px) {
     :root {
@@ -1807,460 +1761,4 @@ ul, li { list-style: none; }
         padding: 12px;
     }
 }
-/* === END RESPONSIVE MEDIA QUERIES (TABLET & MOBILE) === */
-
-/* ==========================================================================
-   PORTFOLIO BRANDED REAL-TIME LIVE CHAT (No WhatsApp Branding)
-   ========================================================================== */
-
-/* Floating Container */
-.live-chat-wrapper {
-    position: fixed;
-    bottom: 82px;
-    right: 25px;
-    z-index: 999999;
-}
-
-/* Floating Trigger Button */
-.live-chat-trigger {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    background: var(--bg-card, #252b2f);
-    border: 2px solid var(--primary, #f0bb62);
-    color: var(--primary, #f0bb62);
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 20px rgba(240, 187, 98, 0.25);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-}
-
-.live-chat-trigger:hover {
-    transform: scale(1.1);
-    background: var(--primary, #f0bb62);
-    color: #121619;
-    box-shadow: 0 10px 30px rgba(240, 187, 98, 0.5);
-}
-
-/* Glowing Pulse Ring */
-.trigger-ping-ring {
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    border: 2px solid var(--primary, #f0bb62);
-    animation: chatPulse 2.2s infinite;
-    pointer-events: none;
-}
-
-@keyframes chatPulse {
-    0% { transform: scale(0.95); opacity: 0.8; }
-    70% { transform: scale(1.3); opacity: 0; }
-    100% { transform: scale(1.3); opacity: 0; }
-}
-
-/* Chat Box Window */
-.live-chat-box {
-    position: absolute;
-    bottom: 66px;
-    right: 0;
-    width: 330px;
-    background: #1c2226;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
-    overflow: hidden;
-    display: none;
-    flex-direction: column;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    animation: chatSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.live-chat-box.open {
-    display: flex !important;
-}
-
-@keyframes chatSlideUp {
-    from { opacity: 0; transform: translateY(15px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Chat Header */
-.live-chat-header {
-    background: #161b1e;
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.chat-header-avatar {
-    position: relative;
-    width: 42px;
-    height: 42px;
-    flex-shrink: 0;
-}
-
-.chat-header-avatar img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--primary, #f0bb62);
-}
-
-.chat-online-badge {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 11px;
-    height: 11px;
-    background: #10b981;
-    border: 2px solid #161b1e;
-    border-radius: 50%;
-}
-
-.chat-header-info h4 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #ffffff;
-    margin-bottom: 2px;
-    font-family: var(--font-heading);
-}
-
-.chat-header-info p {
-    font-size: 11px;
-    color: #10b981;
-    margin-bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.live-dot {
-    width: 6px;
-    height: 6px;
-    background: #10b981;
-    border-radius: 50%;
-    display: inline-block;
-    animation: pulse 1.5s infinite;
-}
-
-.chat-close-btn {
-    background: transparent;
-    border: none;
-    color: #8c9399;
-    font-size: 22px;
-    margin-left: auto;
-    cursor: pointer;
-    line-height: 1;
-    transition: color 0.2s;
-}
-
-.chat-close-btn:hover { color: #ffffff; }
-
-/* Messages Body */
-.live-chat-body {
-    padding: 18px 16px;
-    background: rgba(15, 20, 24, 0.85);
-    height: 260px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    scroll-behavior: smooth;
-}
-
-.live-chat-body::-webkit-scrollbar {
-    width: 4px;
-}
-.live-chat-body::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-}
-
-/* Incoming Support Message */
-.chat-incoming {
-    background: #252c31;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 11px 14px;
-    border-radius: 14px 14px 14px 2px;
-    max-width: 85%;
-    align-self: flex-start;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-}
-
-.chat-incoming p {
-    font-size: 13px;
-    color: #ffffff;
-    line-height: 1.5;
-    margin-bottom: 3px;
-}
-
-.chat-msg-time {
-    font-size: 10px;
-    color: #8c9399;
-    display: block;
-    text-align: right;
-}
-
-/* Outgoing Visitor Message */
-.chat-outgoing {
-    background: var(--primary, #f0bb62);
-    color: #121619;
-    padding: 11px 14px;
-    border-radius: 14px 14px 2px 14px;
-    max-width: 85%;
-    align-self: flex-end;
-    box-shadow: 0 4px 15px rgba(240, 187, 98, 0.2);
-}
-
-.chat-outgoing p {
-    font-size: 13px;
-    font-weight: 500;
-    margin-bottom: 2px;
-}
-
-.chat-outgoing .chat-msg-time {
-    color: rgba(18, 22, 25, 0.6);
-}
-
-/* Input Area */
-.live-chat-footer {
-    display: flex;
-    align-items: center;
-    padding: 12px 14px;
-    background: #161b1e;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    gap: 10px;
-}
-
-.live-chat-footer input {
-    flex: 1;
-    min-width: 0; /* ইনপুট যাতে বাটনকে চাপ না দেয় */
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    font-size: 13px;
-    padding: 10px 16px;
-    border-radius: 20px;
-    outline: none;
-    transition: all 0.2s;
-}
-
-.live-chat-footer input:focus {
-    border-color: var(--primary, #f0bb62);
-    box-shadow: 0 0 10px rgba(240, 187, 98, 0.2);
-}
-
-.chat-send-btn {
-    width: 38px !important;
-    height: 38px !important;
-    min-width: 38px !important;
-    min-height: 38px !important;
-    flex-shrink: 0 !important; /* চাপা খাওয়া পুরোপুরি বন্ধ */
-    border-radius: 50% !important;
-    background: var(--primary, #f0bb62) !important;
-    border: none !important;
-    color: #121619 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer;
-    padding: 0 !important;
-    transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.chat-send-btn:hover {
-    background: var(--primary-hover, #e0aa50) !important;
-    transform: scale(1.08);
-}
-
-.chat-send-btn i {
-    font-size: 13px;
-    margin-right: 2px; /* প্লেন আইকনটির অপটিক্যাল সেন্টার ব্যালান্স */
-}
-
-@media (max-width: 576px) {
-    .live-chat-box {
-        width: calc(100vw - 36px);
-        right: -10px;
-    }
-}
-
-/* ==========================================================================
-   BUTTERY SMOOTH FLOATING BADGE (Apple-Style Spring Motion)
-   ========================================================================== */
-.chat-floating-badge {
-    position: absolute;
-    right: 68px; /* বাটনের ঠিক বামপাশে পজিশন */
-    top: 50%;
-    transform: translateY(-50%) translateX(25px) scale(0.85);
-    background: rgba(22, 27, 31, 0.95);
-    border: 1.5px solid var(--primary, #f0bb62);
-    padding: 8px 18px;
-    border-radius: 30px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    white-space: nowrap;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(240, 187, 98, 0.25);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 999998;
-}
-
-/* স্মুথ এন্ট্রি অ্যানিমেশন */
-.chat-floating-badge.show {
-    animation: badgeSlideIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* স্মুথ এক্সিট অ্যানিমেশন */
-.chat-floating-badge.hide {
-    animation: badgeSlideOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes badgeSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateY(-50%) translateX(25px) scale(0.82);
-        filter: blur(6px);
-    }
-    65% {
-        opacity: 1;
-        transform: translateY(-50%) translateX(-3px) scale(1.02);
-        filter: blur(0);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0) scale(1);
-        filter: blur(0);
-    }
-}
-
-@keyframes badgeSlideOut {
-    0% {
-        opacity: 1;
-        transform: translateY(-50%) translateX(0) scale(1);
-        filter: blur(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-50%) translateX(18px) scale(0.88);
-        filter: blur(4px);
-    }
-}
-
-.badge-pulse-dot {
-    width: 8px;
-    height: 8px;
-    background: #10b981;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 10px #10b981;
-    animation: pulse 1.5s infinite;
-}
-
-.badge-text {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff;
-    font-family: var(--font-heading, 'Jost', sans-serif);
-    letter-spacing: 0.5px;
-}
-
-
-/* ==========================================================================
-   PERFECT MOBILE RESPONSIVE FIX FOR LIVE CHAT WIDGET
-   ========================================================================== */
-
-/* ইনপুট ও সেন্ড বাটন যাতে কোনো অবস্থাতেই ফ্রেমের বাইরে না যায় */
-.live-chat-footer {
-    display: flex !important;
-    align-items: center !important;
-    padding: 10px 14px !important;
-    background: #161b1e !important;
-    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-.live-chat-footer input {
-    flex: 1 1 auto !important;
-    min-width: 0 !important; /* ছোট স্ক্রিনে ইনপুট যাতে বাটনকে বাইরে না ঠেলে */
-    width: 100% !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #ffffff !important;
-    font-size: 13px !important;
-    padding: 9px 14px !important;
-    border-radius: 20px !important;
-    outline: none !important;
-    box-sizing: border-box !important;
-}
-
-.chat-send-btn {
-    flex: 0 0 36px !important; /* ফিক্সড সাইজ, কখনো চ্যাপ্টা বা বড় হবে না */
-    width: 36px !important;
-    height: 36px !important;
-    border-radius: 50% !important;
-    background: var(--primary, #f0bb62) !important;
-    border: none !important;
-    color: #121619 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    cursor: pointer !important;
-    padding: 0 !important;
-}
-
-/* মোবাইল ও ছোট স্ক্রিন ব্রেকপয়েন্ট */
-@media (max-width: 576px) {
-    .live-chat-wrapper {
-        bottom: 70px;
-        right: 16px;
-    }
-
-    .live-chat-trigger {
-        width: 48px;
-        height: 48px;
-        font-size: 20px;
-    }
-
-    /* মোবাইলে চ্যাটবক্স পজিশনিং */
-    .live-chat-box {
-        position: fixed !important;
-        bottom: 20px !important; /* মোবাইলে একদম নিচে সুন্দর সেট হবে */
-        left: 12px !important;
-        right: 12px !important;
-        width: auto !important;
-        max-width: calc(100vw - 24px) !important;
-        max-height: 80vh !important;
-        border-radius: 20px !important;
-        z-index: 1000000 !important;
-    }
-
-    /* চ্যাটবক্স ওপেন থাকলে পেছনের ট্রিগার বাটন হাইড থাকবে (ওভারল্যাপ বন্ধ) */
-    .live-chat-box.open ~ .live-chat-trigger {
-        display: none !important;
-    }
-
-    .live-chat-body {
-        height: 50vh !important;
-        max-height: 260px !important;
-        padding: 14px 12px !important;
-    }
-
-    .chat-floating-badge {
-        right: 56px;
-        padding: 6px 12px;
-    }
-}
+/* END: Responsive styles */

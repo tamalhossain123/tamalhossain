@@ -678,9 +678,6 @@
   };
 })();
 
-/* ==========================================================================
-   BACKGROUND CANVAS PARTICLES (Cosmic Stars 60 FPS)
-   ========================================================================== */
 const canvas = document.getElementById("bgCanvas");
 if (canvas) {
   const ctx = canvas.getContext("2d");
@@ -699,8 +696,11 @@ if (canvas) {
       this.x = Math.random() * canvas.width;
       this.y = Math.random() * canvas.height;
       this.size = Math.random() * 2 + 0.6;
-      this.vx = (Math.random() - 0.5) * 0.35;
-      this.vy = (Math.random() - 0.5) * 0.35;
+      
+      // স্পিড বাড়ানোর জন্য 0.35 থেকে পরিবর্তন করে 1.2 করা হয়েছে
+      this.vx = (Math.random() - 0.5) * 1.2; 
+      this.vy = (Math.random() - 0.5) * 1.2;
+      
       this.sparklePhase = Math.random() * Math.PI * 2;
       this.isDiamond = Math.random() > 0.75;
     }

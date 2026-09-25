@@ -5,21 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- SEO Meta Tags -->
     <title id="dynMetaTitle">Md. Tamal Hossain | Front-End & WordPress Developer</title>
     <meta name="description" content="Portfolio of Md. Tamal Hossain — Passionate Front-End Developer and WordPress Specialist." />
     <meta name="author" content="Md. Tamal Hossain" />
     <link rel="canonical" href="https://tamalhossain.netlify.app/" />
 
-    <!-- Dynamic Favicon -->
     <link id="dynFavicon" rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon.ico" />
 
-    <!-- Fonts & Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="assets/fonts/themify-icons.css" />
@@ -34,18 +30,20 @@
   </head>
 
   <body>
-    <!-- ULTRA FAST PRELOADER -->
+    <!-- START PRELOADER -->
     <div class="preloader" id="preloader">
       <div class="spinner">
         <div class="double-bounce1"></div>
         <div class="double-bounce2"></div>
       </div>
     </div>
+    <!-- END PRELOADER -->
 
-    <!-- BACKGROUND ANIMATED CANVAS -->
+    <!-- START BACKGROUND CANVAS -->
     <canvas id="bgCanvas"></canvas>
+    <!-- END BACKGROUND CANVAS -->
 
-    <!-- NAVBAR -->
+    <!-- START NAVBAR -->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top navbar-custom">
       <div class="container">
         <a class="navbar-brand" href="#home">
@@ -67,6 +65,7 @@
         </div>
       </div>
     </nav>
+    <!-- END NAVBAR -->
 
     <!-- START HERO SECTION -->
     <section id="home" class="home_bg hero-section">
@@ -75,15 +74,12 @@
         <div class="row justify-content-center">
           <div class="col-lg-10 col-md-12 text-center">
             <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
-              <!-- Greeting Badge -->
               <div class="hero-badge">
                 <span> <span id="dynSubtitle">Hi There! I'm</span></span>
               </div>
 
-              <!-- Main Name Heading -->
               <h1 class="hero-name" id="dynHeroName">Md. Tamal Hossain</h1>
 
-              <!-- Dynamic Typing Titles -->
               <div class="hero-typing-box">
                 <span class="typing-prefix">I am a </span>
                 <span class="typewrite" id="typewriteHeading">
@@ -91,10 +87,8 @@
                 </span>
               </div>
 
-              <!-- Short Intro / Bio -->
               <p class="hero-bio" id="dynHeroBio"></p>
 
-              <!-- CTA Action Buttons -->
               <div class="hero-btn-group">
                 <a href="#contact" id="dynBtnSayHello" class="btn-main">
                   Say Hello <i class="fa-solid fa-paper-plane ms-2"></i>
@@ -104,7 +98,6 @@
                 </a>
               </div>
 
-              <!-- Liquid Glass Social Dock (Dynamic) -->
               <div class="hero-social-wrapper">
                 <div class="social-dock" id="dynHeroSocialDock"></div>
               </div>
@@ -120,15 +113,12 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-10 col-md-12 text-center" data-aos="fade-up" data-aos-duration="1000">
-            <!-- Circular Avatar -->
             <div class="about-avatar-box">
               <img id="dynProfileImg" src="assets/img/profile-pic.png" alt="Profile Picture" class="about-avatar-img" loading="lazy" />
             </div>
 
-            <!-- Centered Name & Title Heading -->
             <h3 class="about-heading" id="dynIntroTitle"></h3>
 
-            <!-- Centered Bio Paragraphs -->
             <div class="about-bio-content" id="dynAboutBio"></div>
 
             <a id="dynResumeBtn" href="#" target="_blank" class="btn-sub" style="display: none;">
@@ -151,7 +141,6 @@
             </div>
           </div>
 
-          <!-- Right Column: Dynamic Progress Bars -->
           <div class="col-lg-6 col-md-12" data-aos="fade-left" data-aos-duration="1000">
             <div class="skills-list-container" id="dynSkillsList"></div>
           </div>
@@ -160,7 +149,7 @@
     </section>
     <!-- END SKILLS SECTION -->
 
-    <!-- SERVICE SECTION -->
+    <!-- START SERVICE SECTION -->
     <section id="service" class="service_area section-padding">
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
@@ -172,7 +161,7 @@
     </section>
     <!-- END SERVICE SECTION -->
 
-    <!-- FUNFACT SECTION -->
+    <!-- START FUNFACT SECTION -->
     <section id="funfact" class="funfact_area section-padding counter_feature">
       <div class="container">
         <div class="row text-center" id="dynFunfactsList"></div>
@@ -180,7 +169,7 @@
     </section>
     <!-- END FUNFACT SECTION -->
 
-    <!-- TECHNOLOGIES SECTION -->
+    <!-- START TECHNOLOGIES SECTION -->
     <section id="technologies" class="technologies-part section-padding">
       <div class="container">
         <div class="section-title text-center" data-aos="fade-up">
@@ -200,7 +189,6 @@
           <p>Showcasing a curated selection of my recent creative and technical projects, focused on quality, usability, and impact.</p>
         </div>
 
-        <!-- Filter Buttons (Dynamic Categories) -->
         <div class="row">
           <div class="col-12 text-center">
             <div class="portfolio_filter" data-aos="fade-up" data-aos-delay="100">
@@ -211,13 +199,12 @@
           </div>
         </div>
 
-        <!-- Unified Portfolio Grid -->
         <div class="row portfolio_item" id="dynPortfolioGrid" data-aos="fade-up" data-aos-delay="200"></div>
       </div>
     </section>
     <!-- END PORTFOLIO SECTION -->
 
-    <!-- SMOOTH IMAGE LIGHTBOX MODAL -->
+    <!-- START IMAGE LIGHTBOX -->
     <div id="imageLightbox" class="lightbox-modal" onclick="handleLightboxBackdrop(event)">
       <button type="button" class="lightbox-close-btn" onclick="closeLightbox()" aria-label="Close Lightbox">
         <i class="fa-solid fa-xmark"></i>
@@ -227,6 +214,7 @@
         <h4 id="lightboxTitle" class="lightbox-caption"></h4>
       </div>
     </div>
+    <!-- END IMAGE LIGHTBOX -->
 
     <!-- START RESUME SECTION -->
     <section id="resume" class="resume_area section-padding">
@@ -237,7 +225,6 @@
         </div>
 
         <div class="row">
-          <!-- Experience Column -->
           <div class="col-lg-6 col-md-12 mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
             <div class="timeline-column-header">
               <div class="timeline-icon-box"><i class="fa-solid fa-briefcase"></i></div>
@@ -246,7 +233,6 @@
             <div class="timeline-track" id="dynExpContainer"></div>
           </div>
 
-          <!-- Education Column -->
           <div class="col-lg-6 col-md-12" data-aos="fade-up" data-aos-delay="200">
             <div class="timeline-column-header">
               <div class="timeline-icon-box"><i class="fa-solid fa-graduation-cap"></i></div>
@@ -263,7 +249,6 @@
     <section id="contact" class="contact_us section-padding">
       <div class="container">
         <div class="row">
-          <!-- Form -->
           <div class="col-lg-6 col-md-12 mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
             <div class="contact-form-wrapper">
               <h2 class="contact-section-title">Just say Hello</h2>
@@ -280,7 +265,6 @@
             </div>
           </div>
 
-          <!-- Contact Info & Dynamic Socials -->
           <div class="col-lg-6 col-md-12 ps-lg-5" data-aos="fade-left" data-aos-duration="1000">
             <div class="contact-info-wrapper">
               <h2 class="contact-section-title">Contact Info</h2>
@@ -301,7 +285,6 @@
                 </div>
               </div>
 
-              <!-- Social Profiles Dock Section (Dynamic) -->
               <div class="contact-social-section">
                 <span class="contact-social-prompt">Visit my social profile and get connected</span>
                 <div class="social-dock mt-3" id="dynContactSocialDock"></div>
@@ -313,7 +296,7 @@
     </section>
     <!-- END CONTACT SECTION -->
 
-    <!-- THANK YOU POPUP -->
+    <!-- START THANK-YOU POPUP -->
     <div id="thankYouPopup" class="popup-overlay" style="display: none">
       <div class="popup-content">
         <div class="popup-check-icon"><i class="fa-solid fa-check"></i></div>
@@ -322,8 +305,9 @@
         <button type="button" class="popup-close-btn" onclick="closePopup()">OK</button>
       </div>
     </div>
+    <!-- END THANK-YOU POPUP -->
 
-    <!-- FOOTER -->
+    <!-- START FOOTER -->
     <footer class="footer">
       <div class="container">
         <div class="row">
@@ -333,43 +317,9 @@
         </div>
       </div>
     </footer>
+    <!-- END FOOTER -->
 
-    <!-- REAL-TIME BRANDED LIVE CHAT WIDGET -->
-    <div class="live-chat-wrapper" id="liveChatWrapper">
-      <div class="live-chat-box" id="liveChatBox">
-        <div class="live-chat-header">
-          <div class="chat-header-avatar">
-            <img id="dynChatAvatar" src="assets/img/profile-pic.png" alt="Avatar" />
-            <span class="chat-online-badge"></span>
-          </div>
-          <div class="chat-header-info">
-            <h4 id="dynChatName">Md. Tamal Hossain</h4>
-            <p><span class="live-dot"></span> Active Now • Instant Support</p>
-          </div>
-          <button type="button" class="chat-close-btn" onclick="toggleLiveChat()">&times;</button>
-        </div>
-        <div class="live-chat-body" id="liveChatBody">
-          <div class="chat-msg chat-incoming">
-            <p>Hello! 👋 Welcome to my portfolio. Feel free to ask me anything about your project or services.</p>
-            <span class="chat-msg-time">Just now</span>
-          </div>
-        </div>
-        <form class="live-chat-footer" onsubmit="sendLiveMessage(event)">
-          <input type="text" id="liveUserMessage" placeholder="Write a message..." required autocomplete="off" />
-          <button type="submit" class="chat-send-btn" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
-        </form>
-      </div>
-      <div class="chat-floating-badge" id="chatFloatingBadge">
-        <span class="badge-pulse-dot"></span>
-        <span class="badge-text">💬 Live Chat</span>
-      </div>
-      <button type="button" class="live-chat-trigger" onclick="toggleLiveChat()" aria-label="Open Live Chat">
-        <span class="trigger-ping-ring"></span>
-        <i class="fa-solid fa-comment-dots"></i>
-      </button>
-    </div>
-
-    <!-- Scripts -->
+    <!-- START SCRIPTS -->
     <script src="assets/js/jquery-1.12.4.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/owlcarousel/js/owl.carousel.min.js"></script>
@@ -378,5 +328,6 @@
     <script src="assets/js/scrolltopcontrol.js"></script>
     <script src="assets/js/magic_mouse.js"></script>
     <script src="assets/js/scripts.js"></script>
+    <!-- END SCRIPTS -->
   </body>
 </html>
