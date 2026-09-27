@@ -12,9 +12,10 @@
 
     <link id="dynFavicon" rel="icon" type="image/png" sizes="16x16" href="./assets/img/favicon.ico" />
 
+    <!-- Google Fonts (Including Lobster Two for Animated Logo) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Jost:wght@400;500;600;700&family=Lobster+Two:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -27,6 +28,7 @@
     <link rel="stylesheet" href="assets/css/animate.css" />
     <link rel="stylesheet" href="assets/css/magic-mouse.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
+    
   </head>
 
   <body>
@@ -46,9 +48,30 @@
     <!-- START NAVBAR -->
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top navbar-custom">
       <div class="container">
-        <a class="navbar-brand" href="#home">
-          <img id="dynNavLogo" src="assets/img/logo.png" alt="Logo" />
+        <!-- ANIMATED MOTION LOGO START -->
+        <a class="navbar-brand brand-motion-logo" href="#home">
+          <svg class="logo-svg" viewBox="0 0 300 50" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                  <filter id="neon-glow" x="-50%" y="-50%" width="200%" height="200%">
+                      <feGaussianBlur stdDeviation="2" result="blur"/>
+                      <feMerge>
+                          <feMergeNode in="blur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                  </filter>
+              </defs>
+              <text x="0" y="38" class="logo-text-base">
+                  <tspan class="base-t">Tamal</tspan>
+                  <tspan class="base-h" dx="8">Hossain</tspan>
+              </text>
+              <text x="0" y="38" class="logo-text-anim">
+                  <tspan class="anim-t">Tamal</tspan>
+                  <tspan class="anim-h" dx="8">Hossain</tspan>
+              </text>
+          </svg>
         </a>
+        <!-- ANIMATED MOTION LOGO END -->
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="mdi mdi-menu"></span>
         </button>
