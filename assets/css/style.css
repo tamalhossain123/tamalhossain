@@ -212,6 +212,59 @@ ul, li { list-style: none; }
 .navbar-custom .navbar-nav li a.active { 
     color: var(--primary) !important; 
 }
+
+
+.brand-motion-logo {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+      }
+
+      .logo-svg {
+          width: 250px; 
+          height: 45px;
+          overflow: visible;
+      }
+
+      .logo-text-base {
+          font-family: "Lobster Two", cursive;
+          font-size: 38px;
+          font-weight: 700;
+          font-style: italic;
+          letter-spacing: 1px;
+          stroke-width: 1px;
+      }
+      
+      .base-t { fill: #f5f5f5; stroke: rgba(255, 255, 255, 0.1); }
+      .base-h { fill: #f0bb62; stroke: rgba(229, 169, 60, 0.2); }
+
+      .logo-text-anim {
+          font-family: "Lobster Two", cursive;
+          font-size: 38px;
+          font-weight: 700;
+          font-style: italic;
+          letter-spacing: 1px;
+          fill: transparent; 
+          stroke-width: 1.5px; 
+          filter: url(#neon-glow);
+      }
+
+      .anim-t {
+          stroke: #f0bb62; 
+          stroke-dasharray: 40 180; 
+          animation: flowAnim 4s linear infinite;
+      }
+
+      .anim-h {
+          stroke: #ffffff; 
+          stroke-dasharray: 40 180;
+          animation: flowAnim 4s linear infinite reverse;
+      }
+
+      @keyframes flowAnim {
+          0% { stroke-dashoffset: 220; }
+          100% { stroke-dashoffset: 0; }
+      }
 /* END: Navbar */
 
 /* START: Hero section */
