@@ -176,7 +176,7 @@ ul, li { list-style: none; }
 }
 
 .navbar-custom.nav-sticky {
-    background: rgba(30, 36, 40, 0.92) !important;
+    background: rgba(0, 0, 0, 26%) !important;
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     padding: 12px 0;
