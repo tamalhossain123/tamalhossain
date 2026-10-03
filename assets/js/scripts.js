@@ -443,72 +443,150 @@
 
   /* END: Profile renderer */
 
-  /* START: Portfolio renderer */
-  function applyProjectsToDOM(projects) {
-    const grid = document.getElementById("dynPortfolioGrid");
-    if (!grid || !projects || projects.length === 0) return;
+  /* ==========================================
+   START: Portfolio & Filter Dynamic Renderer
+   ========================================== */
 
-    grid.innerHTML = projects
-      .map((p) => {
-        const isScroll = p.scrollMode === "scroll";
-        const isLightbox = p.actionType === "lightbox";
-        const catClass = (p.category || "website")
-          .toLowerCase()
-          .replace(/\s+/g, "-");
-        const safeTitle = (p.title || "").replace(/'/g, "\\'");
-        const projectImg = resolveImageUrl(p.image);
+// ১. ফিল্টার বাটনগুলো ডাইনামিক রেন্ডার ও ক্লিক ইভেন্ট হ্যান্ডলার
+function applyFiltersToDOM(projects, categories = []) {
+  const filterList = document.getElementById("dynFilterList");
+  if (!filterList) return;
 
-        return `
-                <div class="col-lg-4 col-md-6 col-12 mix ${catClass} mb-4">
-                    <div class="portfolio-card">
-                        <div class="browser-bar">
-                            <span class="dot dot-red"></span>
-                            <span class="dot dot-yellow"></span>
-                            <span class="dot dot-green"></span>
-                            <span class="browser-title">${p.title}</span>
-                        </div>
-                        <div class="${isScroll ? "card-screen-scroll" : "card-screen-graphic"}">
-                            <img src="${projectImg}" alt="${p.title}" loading="lazy" />
-                            ${
-                              isLightbox
-                                ? `
-                                <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
-                                    <i class="fa-solid fa-magnifying-glass-plus"></i>
-                                </button>
-                            `
-                                : ""
-                            }
-                        </div>
-                        <div class="card-meta">
-                            <div class="meta-text">
-                                <span class="meta-cat">${p.category}</span>
-                                <h3 class="title">${p.title}</h3>
-                                <p class="desc">${p.description || ""}</p>
-                            </div>
-                            <div class="meta-action">
-                                ${
-                                  p.liveUrl && !isLightbox
-                                    ? `
-                                    <a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview">
-                                        <i class="fa fa-link"></i>
-                                    </a>
-                                `
-                                    : `
-                                    <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
-                                        <i class="fa-solid fa-eye"></i>
-                                    </button>
-                                `
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-      })
-      .join("");
+  // ক্যাটাগরি লিস্ট নির্ধারণ: ব্যাকএন্ডের ক্যাটাগরি অথবা প্রজেক্ট থেকে ইউনিক ক্যাটাগরি নিবে
+  let finalCategories = [];
+  if (categories && categories.length > 0) {
+    finalCategories = categories;
+  } else if (projects && projects.length > 0) {
+    // প্রজেক্ট থেকে ক্যাটাগরিগুলো ফিল্টার করে ইউনিক সেট তৈরি
+    finalCategories = [...new Set(projects.map((p) => p.category).filter(Boolean))];
   }
 
-  /* END: Portfolio renderer */
+  // ডিফল্ট All Projects বাটন
+  let filterHTML = `<li class="filter active" data-filter="all">All Projects</li>`;
+
+  // ক্যাটাগরি বাটনগুলো যুক্ত করা
+  finalCategories.forEach((cat) => {
+    const catSlug = cat.toLowerCase().trim().replace(/\s+/g, "-");
+    // MixItUp ও Isotope-এর জন্য সিলেক্টরে ডট (.) ব্যবহার করা হয়েছে
+    filterHTML += `<li class="filter" data-filter=".${catSlug}">${cat}</li>`;
+  });
+
+  filterList.innerHTML = filterHTML;
+
+  // বাটনে ক্লিক করলে ফিল্টার হওয়ার লজিক সেটআপ
+  setupPortfolioFilterActions();
+}
+
+// ২. ফিল্টার বাটনে ক্লিক হ্যান্ডলার (Vanilla JS + MixItUp Fallback)
+function setupPortfolioFilterActions() {
+  const filterItems = document.querySelectorAll("#dynFilterList .filter");
+  const gridCards = document.querySelectorAll("#dynPortfolioGrid > div");
+
+  filterItems.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      // একটিভ ক্লাস সুইচ করা
+      filterItems.forEach((item) => item.classList.remove("active"));
+      this.classList.add("active");
+
+      const filterValue = this.getAttribute("data-filter");
+
+      // কার্ড ফিল্টার করা
+      gridCards.forEach((card) => {
+        if (filterValue === "all" || filterValue === "*") {
+          card.style.display = ""; // শো করবে
+        } else {
+          const targetClass = filterValue.replace(/^\./, "");
+          if (card.classList.contains(targetClass)) {
+            card.style.display = "";
+          } else {
+            card.style.display = "none";
+          }
+        }
+      });
+
+      // যদি আপনার সাইটে MixItUp প্লাগইন ইনস্টল থাকে
+      if (window.mixer && typeof window.mixer.filter === "function") {
+        window.mixer.filter(filterValue);
+      }
+    });
+  });
+}
+
+// ৩. প্রজেক্ট কার্ড রেন্ডারার
+function applyProjectsToDOM(projects, categories = []) {
+  const grid = document.getElementById("dynPortfolioGrid");
+  if (!grid || !projects || projects.length === 0) return;
+
+  // প্রথমে প্রজেক্ট কার্ডগুলো রেন্ডার করা
+  grid.innerHTML = projects
+    .map((p) => {
+      const isScroll = p.scrollMode === "scroll";
+      const isLightbox = p.actionType === "lightbox";
+      const catClass = (p.category || "website")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-");
+      const safeTitle = (p.title || "").replace(/'/g, "\\'");
+      const projectImg = typeof resolveImageUrl === "function" 
+        ? resolveImageUrl(p.image) 
+        : p.image;
+
+      return `
+        <div class="col-lg-4 col-md-6 col-12 mix ${catClass} mb-4">
+            <div class="portfolio-card">
+                <div class="browser-bar">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                    <span class="browser-title">${p.title}</span>
+                </div>
+                <div class="${isScroll ? "card-screen-scroll" : "card-screen-graphic"}">
+                    <img src="${projectImg}" alt="${p.title}" loading="lazy" />
+                    ${
+                      isLightbox
+                        ? `
+                        <button type="button" class="graphic-zoom-overlay" onclick="openLightbox('${projectImg}', '${safeTitle}')" title="Zoom Preview">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </button>
+                    `
+                        : ""
+                    }
+                </div>
+                <div class="card-meta">
+                    <div class="meta-text">
+                        <span class="meta-cat">${p.category}</span>
+                        <h3 class="title">${p.title}</h3>
+                        <p class="desc">${p.description || ""}</p>
+                    </div>
+                    <div class="meta-action">
+                        ${
+                          p.liveUrl && !isLightbox
+                            ? `
+                            <a href="${p.liveUrl}" target="_blank" class="port-btn" title="Live Preview">
+                                <i class="fa fa-link"></i>
+                            </a>
+                        `
+                            : `
+                            <button type="button" onclick="openLightbox('${projectImg}', '${safeTitle}')" class="port-btn" title="Zoom Preview">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        `
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  // 🔥 প্রজেক্ট কার্ড তৈরির পর ফিল্টার বাটনগুলো তৈরি করবে:
+  applyFiltersToDOM(projects, categories);
+}
+
+/* ==========================================
+   END: Portfolio & Filter Dynamic Renderer
+   ========================================== */
 
   /* START: Backend sync */
   async function syncPortfolioWithBackend() {
